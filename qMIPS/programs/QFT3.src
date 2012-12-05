@@ -1,0 +1,10 @@
+.text 0
+addi R1, R0, 2
+addi R2, R0, 3
+qhad Q0, Q0
+qphs Q0, Q1, R1
+qphs Q0, Q2, R2
+qhad Q1, Q1
+qphs Q1, Q2, R1
+qhad Q2, Q2
+trap 0

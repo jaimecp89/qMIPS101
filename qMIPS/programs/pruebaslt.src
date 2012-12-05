@@ -1,0 +1,11 @@
+.byte 200 0x7fffffff
+.byte 204 0x7fffffff
+
+.text 0
+
+addi R1, R1, 200
+lw R2, 4(R1)
+lw R1, 0(R1)
+add R3, R1, R2
+
+trap 0

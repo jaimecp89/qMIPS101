@@ -1,0 +1,6 @@
+.byte 200 0x7
+.text 0
+addi R1, R1, 200
+lw R1, 0(R1)
+qrst R1
+trap 0

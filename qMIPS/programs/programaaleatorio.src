@@ -1,0 +1,38 @@
+/*
+
+Este programa de prueba va calculando un numero 
+aleatorio de 3 bits y se detiene cuando es igual
+a un valor obtenido de la direccion 0x200. En R2
+se guarda el numero de intentos.
+
+*/
+
+//Valor a cargar de memoria
+.word 0x200 0x7 0x8 0x9
+
+.text 0
+
+//Se carga el valor en R1
+addi R1, R1, 0x200
+lw R1, 1(R1)
+
+loop:
+
+//Se aumenta el contador
+addi R2, R2, 1
+
+//La maquina cuantica genera el numero aleatorio
+qhad Q0, Q0
+qhad Q1, Q1
+qhad Q2, Q2
+qmea Q0, R3, 0
+qmea Q1, R4, 1
+or R3, R3, R4
+qmea Q2, R4,2
+or R3, R3, R4
+
+//Se compara y se salta si no son iguales
+bne R1, R3, loop
+
+trap 0
+

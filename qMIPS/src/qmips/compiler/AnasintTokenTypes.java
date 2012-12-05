@@ -1,0 +1,64 @@
+// $ANTLR : "Anasint.g" -> "Anasint.java"$
+
+	package qmips.compiler;	
+	import qmips.devices.memory.IMemory;
+	import qmips.others.LogicVector;
+	import java.util.Map;
+	import java.util.Map.Entry;
+	import java.util.HashMap;
+	import java.util.Set;
+
+public interface AnasintTokenTypes {
+	int EOF = 1;
+	int NULL_TREE_LOOKAHEAD = 3;
+	int BYTE = 4;
+	int HWORD = 5;
+	int WORD = 6;
+	int NUMBER = 7;
+	int MDEC = 8;
+	int HEXADECIMAL = 9;
+	int MHEX = 10;
+	int TEXT = 11;
+	int STRING = 12;
+	int DP = 13;
+	int C = 14;
+	int ADD = 15;
+	int ADDU = 16;
+	int SUB = 17;
+	int SUBU = 18;
+	int MULT = 19;
+	int DIV = 20;
+	int DIVU = 21;
+	int AND = 22;
+	int OR = 23;
+	int XOR = 24;
+	int NOR = 25;
+	int SLT = 26;
+	int ADDI = 27;
+	int ADDIU = 28;
+	int ORI = 29;
+	int SLTI = 30;
+	int OP = 31;
+	int CP = 32;
+	int LW = 33;
+	int LH = 34;
+	int LHU = 35;
+	int LB = 36;
+	int LBU = 37;
+	int SW = 38;
+	int SH = 39;
+	int SB = 40;
+	int J = 41;
+	int BEQ = 42;
+	int BNE = 43;
+	int QPHS = 44;
+	int QMEA = 45;
+	int QRST = 46;
+	int QHAD = 47;
+	int QX = 48;
+	int QY = 49;
+	int QZ = 50;
+	int TRAP = 51;
+	int R_REGISTER = 52;
+	int Q_REGISTER = 53;
+}
