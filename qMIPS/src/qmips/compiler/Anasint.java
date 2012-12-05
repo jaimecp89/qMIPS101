@@ -98,18 +98,31 @@ public Anasint(ParserSharedInputState state) {
 		
 		try {      // for error handling
 			{
-			_loop251:
+			_loop3:
 			do {
 				if (((LA(1) >= BYTE && LA(1) <= WORD))) {
 					dataDirective();
 				}
 				else {
-					break _loop251;
+					break _loop3;
 				}
 				
 			} while (true);
 			}
-			textDirective();
+			{
+			int _cnt5=0;
+			_loop5:
+			do {
+				if ((LA(1)==TEXT)) {
+					textDirective();
+				}
+				else {
+					if ( _cnt5>=1 ) { break _loop5; } else {throw new NoViableAltException(LT(1), getFilename());}
+				}
+				
+				_cnt5++;
+			} while (true);
+			}
 			match(Token.EOF_TYPE);
 			solveLabels();
 		}
@@ -176,23 +189,23 @@ public Anasint(ParserSharedInputState state) {
 			i=integer();
 			pc = i;
 			{
-			int _cnt258=0;
-			_loop258:
+			int _cnt12=0;
+			_loop12:
 			do {
 				if ((_tokenSet_2.member(LA(1)))) {
 					instructions();
 				}
 				else {
-					if ( _cnt258>=1 ) { break _loop258; } else {throw new NoViableAltException(LT(1), getFilename());}
+					if ( _cnt12>=1 ) { break _loop12; } else {throw new NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt258++;
+				_cnt12++;
 			} while (true);
 			}
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_0);
+			recover(ex,_tokenSet_3);
 		}
 	}
 	
@@ -242,7 +255,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_3);
+			recover(ex,_tokenSet_4);
 		}
 		return i;
 	}
@@ -340,7 +353,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 	}
 	
@@ -357,7 +370,7 @@ public Anasint(ParserSharedInputState state) {
 				match(DP);
 				l = a.getText();
 			}
-			else if ((LA(1)==STRING) && (_tokenSet_4.member(LA(2)))) {
+			else if ((LA(1)==STRING) && (_tokenSet_5.member(LA(2)))) {
 				b = LT(1);
 				match(STRING);
 				l = b.getText();
@@ -369,7 +382,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 		return l;
 	}
@@ -454,7 +467,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 	}
 	
@@ -473,7 +486,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 	}
 	
@@ -492,7 +505,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 	}
 	
@@ -512,7 +525,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 	}
 	
@@ -532,7 +545,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 	}
 	
@@ -559,7 +572,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 	}
 	
@@ -594,7 +607,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 	}
 	
@@ -656,7 +669,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 	}
 	
@@ -671,7 +684,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_4);
+			recover(ex,_tokenSet_5);
 		}
 	}
 	
@@ -761,7 +774,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_5);
+			recover(ex,_tokenSet_6);
 		}
 		return funct;
 	}
@@ -778,7 +791,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_6);
+			recover(ex,_tokenSet_7);
 		}
 		return r;
 	}
@@ -821,7 +834,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_5);
+			recover(ex,_tokenSet_6);
 		}
 		return opcode;
 	}
@@ -870,7 +883,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_5);
+			recover(ex,_tokenSet_6);
 		}
 		return opcode;
 	}
@@ -907,7 +920,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_7);
+			recover(ex,_tokenSet_8);
 		}
 		return opcode;
 	}
@@ -922,7 +935,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_8);
+			recover(ex,_tokenSet_9);
 		}
 		return opcode;
 	}
@@ -953,7 +966,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_5);
+			recover(ex,_tokenSet_6);
 		}
 		return opcode;
 	}
@@ -996,7 +1009,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_9);
+			recover(ex,_tokenSet_10);
 		}
 		return func;
 	}
@@ -1013,7 +1026,7 @@ public Anasint(ParserSharedInputState state) {
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
-			recover(ex,_tokenSet_10);
+			recover(ex,_tokenSet_11);
 		}
 		return r;
 	}
@@ -1092,44 +1105,49 @@ public Anasint(ParserSharedInputState state) {
 	}
 	public static final BitSet _tokenSet_2 = new BitSet(mk_tokenSet_2());
 	private static final long[] mk_tokenSet_3() {
-		long[] data = { 4503595332378610L, 0L};
+		long[] data = { 2050L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_3 = new BitSet(mk_tokenSet_3());
 	private static final long[] mk_tokenSet_4() {
-		long[] data = { 4503593184890882L, 0L};
+		long[] data = { 4503595332378610L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_4 = new BitSet(mk_tokenSet_4());
 	private static final long[] mk_tokenSet_5() {
-		long[] data = { 4503599627370496L, 0L};
+		long[] data = { 4503593184892930L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_5 = new BitSet(mk_tokenSet_5());
 	private static final long[] mk_tokenSet_6() {
-		long[] data = { 4503597479874562L, 0L};
+		long[] data = { 4503599627370496L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_6 = new BitSet(mk_tokenSet_6());
 	private static final long[] mk_tokenSet_7() {
-		long[] data = { 1920L, 0L};
+		long[] data = { 4503597479876610L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_7 = new BitSet(mk_tokenSet_7());
 	private static final long[] mk_tokenSet_8() {
-		long[] data = { 6016L, 0L};
+		long[] data = { 1920L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_8 = new BitSet(mk_tokenSet_8());
 	private static final long[] mk_tokenSet_9() {
-		long[] data = { 9007199254740992L, 0L};
+		long[] data = { 6016L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_9 = new BitSet(mk_tokenSet_9());
 	private static final long[] mk_tokenSet_10() {
-		long[] data = { 4503593184907266L, 0L};
+		long[] data = { 9007199254740992L, 0L};
 		return data;
 	}
 	public static final BitSet _tokenSet_10 = new BitSet(mk_tokenSet_10());
+	private static final long[] mk_tokenSet_11() {
+		long[] data = { 4503593184909314L, 0L};
+		return data;
+	}
+	public static final BitSet _tokenSet_11 = new BitSet(mk_tokenSet_11());
 	
 	}

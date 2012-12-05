@@ -62,7 +62,7 @@ options{
 }
 
 
-program : (dataDirective)* textDirective  EOF {solveLabels();}
+program : (dataDirective)* (textDirective)+  EOF {solveLabels();}
 		;
 
 dataDirective : {int x; int[] v;}(BYTE x=integer v=value 
