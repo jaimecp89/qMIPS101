@@ -1,0 +1,43 @@
+<qcircuit name="HALF_ADDER.qcml" size="5">
+	<stage size="3">
+		<gate gate_id="-1" qubit="2"/>
+	</stage>
+	<stage size="3">
+		<control qubit="0"/>
+		<control qubit="1"/>
+		<gate controlled="true" gate_id="3" qubit="2"/>
+	</stage>
+	<stage size="3">
+		<qcircuit controlled="true" name="XOR.qcml" qubit="0" size="3">
+			<stage size="2"/>
+			<stage size="2">
+				<control qubit="0"/>
+				<gate controlled="true" gate_id="3" qubit="1"/>
+			</stage>
+			<stage size="2">
+				<gate gate_id="-2" qubit="0"/>
+				<gate gate_id="-3" qubit="1"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="2">
+		<qcircuit controlled="true" name="SWAP" qubit="0" size="3">
+			<stage size="2">
+				<control qubit="0"/>
+				<gate controlled="true" gate_id="3" qubit="1"/>
+			</stage>
+			<stage size="2">
+				<gate controlled="true" gate_id="3" qubit="0"/>
+				<control qubit="1"/>
+			</stage>
+			<stage size="2">
+				<control qubit="0"/>
+				<gate controlled="true" gate_id="3" qubit="1"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="2">
+		<gate gate_id="-3" qubit="0"/>
+		<gate gate_id="-3" qubit="1"/>
+	</stage>
+</qcircuit>

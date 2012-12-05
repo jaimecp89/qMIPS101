@@ -1,0 +1,12 @@
+<qcircuit name="NEG" size="1">
+	<stage size="8">
+		<gate gate_id="3" qubit="0"/>
+		<gate gate_id="3" qubit="1"/>
+		<gate gate_id="3" qubit="2"/>
+		<gate gate_id="3" qubit="3"/>
+		<gate gate_id="3" qubit="4"/>
+		<gate gate_id="3" qubit="5"/>
+		<gate gate_id="3" qubit="6"/>
+		<gate gate_id="3" qubit="7"/>
+	</stage>
+</qcircuit>

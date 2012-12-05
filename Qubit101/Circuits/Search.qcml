@@ -1,0 +1,106 @@
+<qcircuit name="Search.qcml" size="15">
+	<stage size="7">
+		<gate gate_id="-1" qubit="4"/>
+		<gate gate_id="-1" qubit="5"/>
+		<gate gate_id="-1" qubit="6"/>
+	</stage>
+	<stage size="7">
+		<gate gate_id="3" qubit="6"/>
+	</stage>
+	<stage size="7">
+		<gate gate_id="1" qubit="4"/>
+		<gate gate_id="1" qubit="5"/>
+		<gate gate_id="1" qubit="6"/>
+	</stage>
+	<stage size="7">
+		<control qubit="0"/>
+		<qcircuit controlled="true" name="OCL0.qcml" qubit="4" size="3">
+			<stage size="3">
+				<gate gate_id="3" qubit="0"/>
+				<gate gate_id="3" qubit="1"/>
+			</stage>
+			<stage size="3">
+				<control qubit="0"/>
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="3">
+				<gate gate_id="3" qubit="0"/>
+				<gate gate_id="3" qubit="1"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="7">
+		<control qubit="1"/>
+		<qcircuit controlled="true" name="OCL1.qcml" qubit="4" size="3">
+			<stage size="3">
+				<gate gate_id="3" qubit="0"/>
+			</stage>
+			<stage size="3">
+				<control qubit="0"/>
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="3">
+				<gate gate_id="3" qubit="0"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="7">
+		<control qubit="2"/>
+		<qcircuit controlled="true" name="OCL2.qcml" qubit="4" size="3">
+			<stage size="3">
+				<gate gate_id="3" qubit="1"/>
+			</stage>
+			<stage size="3">
+				<control qubit="0"/>
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="3">
+				<gate gate_id="3" qubit="1"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="7">
+		<control qubit="3"/>
+		<qcircuit controlled="true" name="OCL3" qubit="4" size="1">
+			<stage size="3">
+				<control qubit="0"/>
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="7">
+		<gate gate_id="1" qubit="4"/>
+		<gate gate_id="1" qubit="5"/>
+	</stage>
+	<stage size="7">
+		<gate gate_id="3" qubit="4"/>
+		<gate gate_id="3" qubit="5"/>
+	</stage>
+	<stage size="7">
+		<gate gate_id="1" qubit="5"/>
+	</stage>
+	<stage size="7">
+		<control qubit="4"/>
+		<gate controlled="true" gate_id="3" qubit="5"/>
+	</stage>
+	<stage size="7">
+		<gate gate_id="1" qubit="5"/>
+	</stage>
+	<stage size="7">
+		<gate gate_id="3" qubit="4"/>
+		<gate gate_id="3" qubit="5"/>
+	</stage>
+	<stage size="7">
+		<gate gate_id="1" qubit="4"/>
+		<gate gate_id="1" qubit="5"/>
+		<gate gate_id="1" qubit="6"/>
+	</stage>
+	<stage size="7">
+		<gate gate_id="-3" qubit="4"/>
+		<gate gate_id="-3" qubit="5"/>
+	</stage>
+</qcircuit>

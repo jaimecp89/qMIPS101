@@ -1,0 +1,11 @@
+<qcircuit name="XOR.qcml" size="3">
+	<stage size="2"/>
+	<stage size="2">
+		<control qubit="0"/>
+		<gate controlled="true" gate_id="3" qubit="1"/>
+	</stage>
+	<stage size="2">
+		<gate gate_id="-2" qubit="0"/>
+		<gate gate_id="-3" qubit="1"/>
+	</stage>
+</qcircuit>
