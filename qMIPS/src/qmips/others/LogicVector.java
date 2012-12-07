@@ -98,13 +98,20 @@ public class LogicVector{
 		return res + " (" + toInteger() + ")";
 	}
 	
-	public boolean equals(LogicVector v){
-		boolean res = v.size() == this.size();
-		if(res)
-			for(int i = 0; i < size(); i++){
-				res = v.get(i).booleanValue() == this.get(i).booleanValue();
-				if(!res) break;
-			}
+	@Override
+	public boolean equals(Object o){
+		boolean res = false;
+		if(o instanceof LogicVector){
+			LogicVector v = (LogicVector)o;
+			res = v.size() == this.size();
+			if(res)
+				for(int i = 0; i < size(); i++){
+					res = v.get(i).booleanValue() == this.get(i).booleanValue();
+					if(!res) break;
+				}
+		}else{
+			throw new IllegalArgumentException("Argument must be a LogicVector instance.");
+		}
 		return res;
 	}
 	

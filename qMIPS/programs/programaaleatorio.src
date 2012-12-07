@@ -8,7 +8,7 @@ se guarda el numero de intentos.
 */
 
 //Valor a cargar de memoria
-.word 0x200 0x7 0x8 0x9
+.word 0x200 0x7
 
 .text 0
 

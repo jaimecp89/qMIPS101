@@ -62,10 +62,13 @@ public class Bus {
 	}
 
 	public synchronized void write(LogicVector in) {
-			if(trace) System.out.println("[" + name + "] " + " written: " + in);
+		if (trace)
+			System.out.println("[" + name + "] " + " written: " + in);
+		if (!in.equals(content)) {
 			for (int i = 0; i < content.size() && i < in.size(); i++)
 				content.set(i, in.get(i));
 			SyncShortcut.sync.activateProcesses(processes);
+		}
 	}
 
 	public int size() {

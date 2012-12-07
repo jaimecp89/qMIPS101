@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import qmips.devices.Device;
 import qmips.others.Behavior;
 import qmips.others.Bus;
+import qmips.others.LogicVector;
 
 /**
  * 
@@ -73,7 +74,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 						current = next;
 					}
 					current.setTransition();
-					machineNotify.write(1,1);
+					machineNotify.write((machineNotify.read().toInteger() + 1) % 2, 1);
 				}
 			}
 

@@ -219,6 +219,7 @@ public class MainView extends JFrame {
 				System.out.println("Reset!!");
 				rst.write(1,1);
 				SyncShortcut.sync.taskEnded();
+				//TODO: Fix reset
 				clk.setCycleCount(0);
 			}
 		});
