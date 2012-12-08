@@ -13,7 +13,7 @@ import qmips.others.LogicVector;
 /**
  * 
  * Registro sincrono simple.
- * Se carga un valor con en activo en el flanco de subida.
+ * Se carga un valor con 'en' activo en el flanco de subida.
  * 
  * @author Jaime Coello de Portugal
  *
@@ -54,6 +54,7 @@ public class SynchronousRegister extends Device {
 			
 			@Override
 			public void task() {
+				System.out.println("Reset en registro: " + rst.read());
 				if (rst.read().get(0)) {
 					output.write(new LogicVector(output.size()));
 					disp.setContent(new LogicVector(output.size()));

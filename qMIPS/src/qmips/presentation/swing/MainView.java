@@ -219,7 +219,10 @@ public class MainView extends JFrame {
 				System.out.println("Reset!!");
 				rst.write(1,1);
 				SyncShortcut.sync.taskEnded();
-				//TODO: Fix reset
+				synchronized(SyncShortcut.sync){
+					SyncShortcut.sync.clockLockWait();
+					rst.write(0,1);
+				}
 				clk.setCycleCount(0);
 			}
 		});
