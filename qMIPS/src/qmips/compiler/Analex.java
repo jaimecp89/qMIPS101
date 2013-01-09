@@ -299,13 +299,13 @@ tryAgain:
 		
 		match("//");
 		{
-		_loop1879:
+		_loop39:
 		do {
 			if ((_tokenSet_0.member(LA(1)))) {
 				matchNot('\r');
 			}
 			else {
-				break _loop1879;
+				break _loop39;
 			}
 			
 		} while (true);
@@ -325,10 +325,10 @@ tryAgain:
 		
 		match("/*");
 		{
-		_loop1883:
+		_loop43:
 		do {
 			// nongreedy exit test
-			if ((LA(1)=='*') && (LA(2)=='/')) break _loop1883;
+			if ((LA(1)=='*') && (LA(2)=='/')) break _loop43;
 			if (((LA(1) >= '\u0000' && LA(1) <= '\u007f')) && ((LA(2) >= '\u0000' && LA(2) <= '\u007f'))) {
 				{
 				if ((LA(1)=='\r') && (LA(2)=='\n')) {
@@ -344,7 +344,7 @@ tryAgain:
 				}
 			}
 			else {
-				break _loop1883;
+				break _loop43;
 			}
 			
 		} while (true);
@@ -391,13 +391,13 @@ tryAgain:
 		
 		mDIGIT(false);
 		{
-		_loop1888:
+		_loop48:
 		do {
 			if (((LA(1) >= '0' && LA(1) <= '9'))) {
 				mDIGIT(false);
 			}
 			else {
-				break _loop1888;
+				break _loop48;
 			}
 			
 		} while (true);
@@ -417,13 +417,13 @@ tryAgain:
 		mDIGIT(false);
 		match(".");
 		{
-		_loop1891:
+		_loop51:
 		do {
 			if (((LA(1) >= '0' && LA(1) <= '9'))) {
 				mDIGIT(false);
 			}
 			else {
-				break _loop1891;
+				break _loop51;
 			}
 			
 		} while (true);
@@ -463,7 +463,7 @@ tryAgain:
 		}
 		}
 		{
-		_loop1895:
+		_loop55:
 		do {
 			switch ( LA(1)) {
 			case '0':  case '1':  case '2':  case '3':
@@ -481,7 +481,7 @@ tryAgain:
 			}
 			default:
 			{
-				break _loop1895;
+				break _loop55;
 			}
 			}
 		} while (true);
@@ -502,13 +502,13 @@ tryAgain:
 		mCHAR(false);
 		}
 		{
-		_loop1899:
+		_loop59:
 		do {
 			if (((LA(1) >= 'a' && LA(1) <= 'z'))) {
 				mCHAR(false);
 			}
 			else {
-				break _loop1899;
+				break _loop59;
 			}
 			
 		} while (true);
