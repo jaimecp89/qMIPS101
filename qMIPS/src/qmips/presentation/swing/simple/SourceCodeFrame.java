@@ -1,4 +1,4 @@
-package qmips.presentation.swing;
+package qmips.presentation.swing.simple;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JTextPane;

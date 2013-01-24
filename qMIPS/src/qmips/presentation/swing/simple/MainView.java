@@ -1,4 +1,4 @@
-package qmips.presentation.swing;
+package qmips.presentation.swing.simple;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
