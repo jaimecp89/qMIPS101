@@ -144,6 +144,35 @@ public class MainWindow extends JFrame {
 				controller.runOneCycle();
 			}
 		});
+		
+		JButton btnLoadSource = new JButton("");
+		btnLoadSource.setToolTipText("Load source");
+		btnLoadSource.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				File f;
+				if ((f = askForFile()) != null)
+					controller.loadSource(f, 0);
+			}
+		});
+		btnLoadSource.setIcon(new ImageIcon(MainWindow.class.getResource("/qmips/icons/load_source.png")));
+		simToolBar.add(btnLoadSource);
+		
+		JButton btnBuildAndLoad = new JButton("");
+		btnBuildAndLoad.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				File f;
+				if ((f = askForFile()) != null)
+					controller.buildAndLoadSource(f, 0);
+			}
+		});
+		btnBuildAndLoad.setIcon(new ImageIcon(MainWindow.class.getResource("/qmips/icons/build_load_source.png")));
+		btnBuildAndLoad.setToolTipText("Build system and load source...");
+		simToolBar.add(btnBuildAndLoad);
+		
+		simToolBar.addSeparator();
+		
 		simToolBar.add(btnRunOneCycle);
 
 		JButton btnRunUntilTrap = new JButton("");
@@ -203,6 +232,7 @@ public class MainWindow extends JFrame {
 		simToolBar.addSeparator();
 		
 		JButton btnResetSignal = new JButton("");
+		btnResetSignal.setToolTipText("Reset signal");
 		btnResetSignal.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -215,6 +245,7 @@ public class MainWindow extends JFrame {
 		simToolBar.addSeparator();
 		
 		JButton btnArrangewindows = new JButton("");
+		btnArrangewindows.setToolTipText("Arrange windows");
 		btnArrangewindows.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {

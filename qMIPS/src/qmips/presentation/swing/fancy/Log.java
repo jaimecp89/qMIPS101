@@ -23,29 +23,34 @@ public class Log {
 
 		private JTextPane text;
 		private Color color;
-		private String mesg;
 
 		public LogWritter(JTextPane text, Color color) {
 			this.text = text;
 			this.color = color;
 		}
 
-		public synchronized void println(String msg) {
-			this.mesg = msg;
-			SwingUtilities.invokeLater(new Runnable(){
-
-				@Override
-				public void run() {
-					StyleContext sc = StyleContext.getDefaultStyleContext();
-					AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
-							StyleConstants.Foreground, color);
-					int len = text.getDocument().getLength();
-					text.setCaretPosition(len);
-					text.setCharacterAttributes(aset, false);
-					text.replaceSelection(mesg + "\n");
-				}
-				
-			});
+		public void println(String msg) {
+			SwingUtilities.invokeLater(new RunnableMessage(msg));
+		}
+		
+		private class RunnableMessage implements Runnable{
+			
+			private String msg;
+			
+			protected RunnableMessage(String msg){
+				this.msg = msg;
+			}
+			
+			@Override
+			public void run() {
+				StyleContext sc = StyleContext.getDefaultStyleContext();
+				AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
+						StyleConstants.Foreground, color);
+				int len = text.getDocument().getLength();
+				text.setCaretPosition(len);
+				text.setCharacterAttributes(aset, false);
+				text.replaceSelection(this.msg + "\n");
+			}
 			
 		}
 	}
