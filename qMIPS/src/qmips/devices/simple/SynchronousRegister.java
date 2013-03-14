@@ -54,7 +54,6 @@ public class SynchronousRegister extends Device {
 			
 			@Override
 			public void task() {
-				System.out.println("Reset en registro: " + rst.read());
 				if (rst.read().get(0)) {
 					output.write(new LogicVector(output.size()));
 					disp.setContent(new LogicVector(output.size()));

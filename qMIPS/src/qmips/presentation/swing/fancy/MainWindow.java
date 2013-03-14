@@ -6,13 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
@@ -36,11 +36,15 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 
 import qmips.devices.Device;
-import javax.swing.ImageIcon;
+import qmips.presentation.swing.fancy.onyxbits.Usher;
 
+/**
+ * 
+ * @author Jaime Coello de Portugal
+ *
+ */
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = 1148004565534821823L;
@@ -52,16 +56,19 @@ public class MainWindow extends JFrame {
 	private JWindow cyclesPopUp;
 	private JButton btnRun;
 	private JTextField cyclesText;
+	private Map<String, Device> shownDevices;
+	
 
 	public MainWindow(Controller contr) {
 		this.controller = contr;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 663, 524);
-		this.addComponentListener(new ComponentAdapter() {
+		setBounds(100, 100, 800, 600);
+		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentMoved(ComponentEvent arg0) {
 				cyclesPopUp.setVisible(false);
 			}
+			
 		});
 		
 		addMouseListener(new MouseAdapter() {
@@ -193,7 +200,32 @@ public class MainWindow extends JFrame {
 		btnRun.setToolTipText("Run for...");
 		simToolBar.add(btnRun);
 
+		simToolBar.addSeparator();
+		
+		JButton btnResetSignal = new JButton("");
+		btnResetSignal.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				controller.resetSignal();
+			}
+		});
+		btnResetSignal.setIcon(new ImageIcon(MainWindow.class.getResource("/qmips/icons/reset.png")));
+		simToolBar.add(btnResetSignal);
+		
+		simToolBar.addSeparator();
+		
+		JButton btnArrangewindows = new JButton("");
+		btnArrangewindows.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				arrangeInternalFrames();
+			}
+		});
+		btnArrangewindows.setIcon(new ImageIcon(MainWindow.class.getResource("/qmips/icons/arrange.png")));
+		simToolBar.add(btnArrangewindows);
+
 		splitPane = new JSplitPane();
+		splitPane.setResizeWeight(1.0);
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		contentPane.add(splitPane, BorderLayout.CENTER);
 		setVisible(true);
@@ -205,6 +237,7 @@ public class MainWindow extends JFrame {
 		mainPane = new JDesktopPane();
 		mainPane.setBackground(Color.LIGHT_GRAY);
 		scrollPane2.setViewportView(mainPane);
+		mainPane.addContainerListener(new Usher());
 
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setRightComponent(scrollPane);
@@ -218,17 +251,30 @@ public class MainWindow extends JFrame {
 	}
 
 	public void displayDevicesViews(Map<String, Device> views) {
+		if(shownDevices == null)
+			shownDevices = new HashMap<String, Device>();
+		else
+			hideDevicesViews();
 		for (Map.Entry<String, Device> view : views.entrySet()) {
 			JInternalFrame jif = new JInternalFrame();
 			JPanel vp = view.getValue().display();
-			jif.setSize(vp.getWidth() + 30, vp.getHeight() + 30);
 			jif.setMaximizable(true);
 			jif.setResizable(true);
 			jif.setTitle(view.getKey());
 			jif.setContentPane(vp);
+			jif.pack();
 			mainPane.add(jif);
+			shownDevices.put(view.getKey(), view.getValue());
 			jif.setVisible(true);
 		}
+	}
+	
+	public void hideDevicesViews(){
+		for(JInternalFrame jif: mainPane.getAllFrames()){
+			jif.setVisible(false);
+			jif.dispose();
+		}
+		shownDevices.clear();
 	}
 
 	public void displayModalInfo(String msg, boolean showStop) {
@@ -281,6 +327,18 @@ public class MainWindow extends JFrame {
 			res = null;
 		}
 		return res;
+	}
+	
+	private void arrangeInternalFrames(){
+		Map<String, Device> aux = new HashMap<String, Device>();
+		if(shownDevices!= null)
+			if(!shownDevices.isEmpty()){
+				for(Map.Entry<String, Device> view : shownDevices.entrySet()){
+					aux.put(view.getKey(), view.getValue());
+				}
+				hideDevicesViews();
+				displayDevicesViews(aux);
+			}
 	}
 
 	interface Controller {

@@ -33,9 +33,10 @@ public interface Synchronization {
 	 * 
 	 * Invocado por el reloj para esperar en el monitor de la sincronizacion
 	 * a que todas las tareas hayan concluido.
+	 * @throws InterruptedException 
 	 * 
 	 */
-	public void clockLockWait();
+	public void clockLockWait() throws InterruptedException;
 	
 	/**
 	 * 

@@ -220,7 +220,11 @@ public class MainView extends JFrame {
 				rst.write(1,1);
 				SyncShortcut.sync.taskEnded();
 				synchronized(SyncShortcut.sync){
-					SyncShortcut.sync.clockLockWait();
+					try {
+						SyncShortcut.sync.clockLockWait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 					rst.write(0,1);
 				}
 				clk.setCycleCount(0);

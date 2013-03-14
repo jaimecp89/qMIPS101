@@ -1,19 +1,17 @@
 package qmips.presentation.swing.fancy;
 
-import java.awt.Dialog;
 import java.io.File;
-import java.util.Map;
 
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import qmips.compiler.MIPSCompiler;
-import qmips.devices.Device;
 import qmips.devices.clock.Clock;
 import qmips.devices.control.ControlUnit;
 import qmips.devices.memory.IMemory;
 import qmips.others.Bus;
 import qmips.presentation.builders.Builder;
+import qmips.sync.PoolSync;
+import qmips.sync.SyncShortcut;
 
 public class MainWindowController implements MainWindow.Controller {
 
@@ -25,6 +23,7 @@ public class MainWindowController implements MainWindow.Controller {
 	private IMemory instr;
 	private MainWindow view;
 	private Thread simulationThread;
+	private Thread clockThread;
 	private File compilerFile;
 
 	public MainWindowController(Builder builder) {
@@ -35,34 +34,58 @@ public class MainWindowController implements MainWindow.Controller {
 	@Override
 	public void runOneCycle() {
 		if (testBuild()) {
-			simulationThread = new Thread(new Runnable(){
+			simulationThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					view.displayModalInfo("Simulating...", true);
-					System.out.println("hola");
-					System.out.flush();
-					if (control.checkTrap() == -1) {
+					if (control.checkTrap() == -1 && !Thread.interrupted()) {
 						clk.runCycles(1);
-					}
-					Log.inf.println("Program terminated with code: " + control.checkTrap());
+					} else
+						Log.inf.println("Program terminated with code: "
+								+ control.checkTrap());
 					view.hideModalInfo();
 				}
 			});
 			simulationThread.start();
+			view.displayModalInfo("Simulating...", true);
 		}
 	}
 
 	@Override
 	public void runCycles(int cycles) {
+		final int c = cycles;
 		if (testBuild()) {
-			
+			simulationThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					int num = c;
+					while (control.checkTrap() == -1 && num > 0 && !Thread.interrupted()) {
+						clk.runCycles(1);
+						num--;
+					}
+					if (control.checkTrap() != -1)
+						Log.inf.println("Program terminated with code: "
+								+ control.checkTrap());
+					view.hideModalInfo();
+				}
+			});
+			simulationThread.start();
+			view.displayModalInfo("Simulating...", true);
 		}
+
 	}
 
 	@Override
 	public void resetSignal() {
 		if (testBuild()) {
-
+			rst.write(1,1);
+			SyncShortcut.sync.taskEnded();
+			synchronized(SyncShortcut.sync){
+				try {
+					SyncShortcut.sync.clockLockWait();
+				} catch (InterruptedException e) {}
+				rst.write(0,1);
+			}
+			clk.setCycleCount(0);
 		}
 	}
 
@@ -76,6 +99,7 @@ public class MainWindowController implements MainWindow.Controller {
 		this.control = builder.getControlUnit();
 		this.instr = builder.getInstrMemory();
 		view.displayDevicesViews(builder.getDisplayableDevices());
+		this.clockThread = builder.getClock().startRunning();
 		systemBuilt = true;
 		Log.inf.println("System successfully built in "
 				+ (System.currentTimeMillis() - t) + " miliseconds.");
@@ -93,45 +117,55 @@ public class MainWindowController implements MainWindow.Controller {
 	public void loadSource(File file, int start) {
 		if (testBuild()) {
 			compilerFile = file;
-			new Thread(new Runnable(){
+
+			new SwingWorker<Void, Void>() {
 
 				@Override
-				public void run() {
+				protected Void doInBackground() throws Exception {
 					boolean err = false;
-					Log.inf.println("Compiling file: \"" + compilerFile.getName() + "\"...");
+					Log.inf.println("Compiling file: \""
+							+ compilerFile.getName() + "\"...");
 					long t = System.currentTimeMillis();
-					try{
-						view.displayModalInfo("Compiling...", false);
+					try {
 						MIPSCompiler.compile(compilerFile, instr);
-						view.hideModalInfo();
-					}catch(Exception e){
+					} catch (Exception e) {
 						err = true;
 						Log.err.println("Compilation error: " + e.getMessage());
 					}
-					if(!err)
-						Log.inf.println("Successful compilation in: " + (System.currentTimeMillis() - t) + " miliseconds.");
+					if (!err)
+						Log.inf.println("Successful compilation in: "
+								+ (System.currentTimeMillis() - t)
+								+ " miliseconds.");
+					return null;
 				}
-				
-			}).start();
-			
+
+				protected void done() {
+					view.hideModalInfo();
+				}
+
+			}.execute();
+
+			view.displayModalInfo("Compiling...", false);
+
 		}
 	}
 
 	@Override
 	public void runUntilTrap() {
 		if (testBuild()) {
-			simulationThread = new Thread(new Runnable(){
+			simulationThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					view.displayModalInfo("Simulating...", true);
-					while (control.checkTrap() == -1) {
+					while (control.checkTrap() == -1 && !Thread.interrupted()) {
 						clk.runCycles(1);
 					}
-					Log.inf.println("Program terminated with code: " + control.checkTrap());
+					Log.inf.println("Program terminated with code: "
+							+ control.checkTrap());
 					view.hideModalInfo();
 				}
 			});
 			simulationThread.start();
+			view.displayModalInfo("Simulating...", true);
 		}
 	}
 
@@ -149,9 +183,12 @@ public class MainWindowController implements MainWindow.Controller {
 
 	@Override
 	public void killSimulationThread() {
+		SyncShortcut.sync.terminate();
+		clockThread.interrupt();
 		simulationThread.interrupt();
+		SyncShortcut.sync = new PoolSync();
+		clockThread = clk.startRunning();
 		view.hideModalInfo();
 	}
-	
 
 }

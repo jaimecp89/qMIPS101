@@ -3,6 +3,7 @@ package qmips.presentation.swing.fancy;
 import java.awt.Color;
 
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -18,24 +19,34 @@ public class Log {
 		err = new LogWritter(text, Color.RED);
 	}
 
-	static class LogWritter {
+	public static class LogWritter {
 
 		private JTextPane text;
 		private Color color;
+		private String mesg;
 
 		public LogWritter(JTextPane text, Color color) {
 			this.text = text;
 			this.color = color;
 		}
 
-		public void println(String msg) {
-			StyleContext sc = StyleContext.getDefaultStyleContext();
-			AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
-					StyleConstants.Foreground, color);
-			int len = text.getDocument().getLength();
-			text.setCaretPosition(len);
-			text.setCharacterAttributes(aset, false);
-			text.replaceSelection(msg + "\n");
+		public synchronized void println(String msg) {
+			this.mesg = msg;
+			SwingUtilities.invokeLater(new Runnable(){
+
+				@Override
+				public void run() {
+					StyleContext sc = StyleContext.getDefaultStyleContext();
+					AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
+							StyleConstants.Foreground, color);
+					int len = text.getDocument().getLength();
+					text.setCaretPosition(len);
+					text.setCharacterAttributes(aset, false);
+					text.replaceSelection(mesg + "\n");
+				}
+				
+			});
+			
 		}
 	}
 }

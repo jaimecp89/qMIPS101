@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+
+import qmips.presentation.swing.fancy.Log;
 
 /**
  * 
@@ -45,26 +48,31 @@ public class PoolSync implements Synchronization {
 				Set<Runnable> aux = waitingTasks;
 				waitingTasks = new HashSet<Runnable>();
 				for (Runnable r : aux) {
-					pool.submit(r);
+					try{
+						pool.submit(r);
+					}catch(RejectedExecutionException e){
+						Log.inf.println("Execution canceled.");
+					}
 				}
 			}
 		}
 	}
 
 	@Override
-	public synchronized void clockLockWait() {
+	public synchronized void clockLockWait() throws InterruptedException{
 		while (runningTasksNum != 0 || !waitingTasks.isEmpty()) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			wait();
 		}
 		runningTasksNum++;
 	}
 
 	@Override
 	public void terminate() {
+		try {
+			clockLockWait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		pool.shutdown();
 	}
 

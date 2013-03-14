@@ -69,7 +69,6 @@ dataDirective : {int x; int[] v;}(BYTE x=integer v=value
 			  | HWORD x=integer v=value
 			  | WORD x=integer v=value )
 			  {  for(int i = 0; i < v.length; i++){
-			      System.out.println(v[i]);
 			  	 	if(dataMem == null) instrMem.load(new LogicVector(v[i], 32), x + i*4);
 			  	 	else dataMem.load(new LogicVector(v[i], 32), x + i*4);
 			     }
