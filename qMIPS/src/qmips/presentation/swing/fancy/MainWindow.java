@@ -37,7 +37,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-import qmips.devices.Device;
 import qmips.presentation.swing.fancy.onyxbits.Usher;
 
 /**
@@ -56,7 +55,7 @@ public class MainWindow extends JFrame {
 	private JWindow cyclesPopUp;
 	private JButton btnRun;
 	private JTextField cyclesText;
-	private Map<String, Device> shownDevices;
+	private Map<String, JPanel> shownDevices;
 	
 
 	public MainWindow(Controller contr) {
@@ -88,8 +87,21 @@ public class MainWindow extends JFrame {
 		mntmLoadSource.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				File f;
-				if ((f = askForFile()) != null)
-					controller.loadSource(f, 0);
+				if ((f = askForFile()) != null){
+					if(controller.loadSource(f, 0)){
+						JInternalFrame jif = new JInternalFrame();
+						JPanel vp = new SourceCodeView(f, controller);
+						jif.setMaximizable(true);
+						jif.setIconifiable(true);
+						jif.setResizable(true);
+						jif.setTitle(f.getAbsolutePath());
+						jif.setContentPane(vp);
+						jif.setSize(300, 400);
+						mainPane.add(jif);
+						shownDevices.put("SourceView", vp);
+						jif.setVisible(true);
+					}
+				}	
 			}
 		});
 		mnFile.add(mntmLoadSource);
@@ -98,8 +110,21 @@ public class MainWindow extends JFrame {
 		mntmBuildAndLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				File f;
-				if ((f = askForFile()) != null)
-					controller.buildAndLoadSource(f, 0);
+				if ((f = askForFile()) != null){
+					if(controller.buildAndLoadSource(f, 0)){
+						JInternalFrame jif = new JInternalFrame();
+						JPanel vp = new SourceCodeView(f, controller);
+						jif.setMaximizable(true);
+						jif.setIconifiable(true);
+						jif.setResizable(true);
+						jif.setTitle(f.getAbsolutePath());
+						jif.setContentPane(vp);
+						jif.setSize(300, 400);
+						mainPane.add(jif);
+						shownDevices.put("SourceView", vp);
+						jif.setVisible(true);
+					}
+				}
 			}
 		});
 		mnFile.add(mntmBuildAndLoad);
@@ -123,9 +148,47 @@ public class MainWindow extends JFrame {
 
 		JMenu mnSimulation = new JMenu("Simulation");
 		mainMenu.add(mnSimulation);
+		
+		JMenuItem mntmRunOneCycle = new JMenuItem("Run one cycle");
+		mntmRunOneCycle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.runOneCycle();
+			}
+		});
+		mnSimulation.add(mntmRunOneCycle);
+		
+		JMenuItem mntmRunUntilTrap = new JMenuItem("Run until trap");
+		mntmRunUntilTrap.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.runUntilTrap();
+			}
+		});
+		mnSimulation.add(mntmRunUntilTrap);
+		
+		JMenuItem mntmRunCycles = new JMenuItem("Run cycles...");
+		mntmRunCycles.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cyclesPopUp.setVisible(!cyclesPopUp.isVisible());
+				cyclesPopUp.setLocation((int)btnRun.getLocationOnScreen().getX(), (int)btnRun.getLocationOnScreen().getY() + btnRun.getHeight());
+			}
+		});
+		mnSimulation.add(mntmRunCycles);
+		
+		mnSimulation.addSeparator();
+		
+		JMenuItem mntmResetSignal = new JMenuItem("Reset signal");
+		mntmResetSignal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.resetSignal();
+			}
+		});
+		mnSimulation.add(mntmResetSignal);
 
-		JMenu mnAbout = new JMenu("About");
-		mainMenu.add(mnAbout);
+		JMenu mnHelp = new JMenu("Help");
+		mainMenu.add(mnHelp);
+		
+		JMenuItem mntmAbout = new JMenuItem("About");
+		mnHelp.add(mntmAbout);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -146,13 +209,26 @@ public class MainWindow extends JFrame {
 		});
 		
 		JButton btnLoadSource = new JButton("");
-		btnLoadSource.setToolTipText("Load source");
+		btnLoadSource.setToolTipText("Load source...");
 		btnLoadSource.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				File f;
-				if ((f = askForFile()) != null)
-					controller.loadSource(f, 0);
+				if ((f = askForFile()) != null){
+					if(controller.loadSource(f, 0)){
+						JInternalFrame jif = new JInternalFrame();
+						JPanel vp = new SourceCodeView(f, controller);
+						jif.setMaximizable(true);
+						jif.setIconifiable(true);
+						jif.setResizable(true);
+						jif.setTitle(f.getAbsolutePath());
+						jif.setContentPane(vp);
+						jif.setSize(300, 400);
+						mainPane.add(jif);
+						shownDevices.put("SourceView", vp);
+						jif.setVisible(true);
+					}
+				}
 			}
 		});
 		btnLoadSource.setIcon(new ImageIcon(MainWindow.class.getResource("/qmips/icons/load_source.png")));
@@ -163,13 +239,39 @@ public class MainWindow extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				File f;
-				if ((f = askForFile()) != null)
-					controller.buildAndLoadSource(f, 0);
+				if ((f = askForFile()) != null){
+					if(controller.buildAndLoadSource(f, 0)){
+						JInternalFrame jif = new JInternalFrame();
+						JPanel vp = new SourceCodeView(f, controller);
+						jif.setMaximizable(true);
+						jif.setIconifiable(true);
+						jif.setResizable(true);
+						jif.setTitle(f.getAbsolutePath());
+						jif.setContentPane(vp);
+						jif.setSize(300, 400);
+						mainPane.add(jif);
+						shownDevices.put("SourceView", vp);
+						jif.setVisible(true);
+					}
+				}
 			}
 		});
 		btnBuildAndLoad.setIcon(new ImageIcon(MainWindow.class.getResource("/qmips/icons/build_load_source.png")));
 		btnBuildAndLoad.setToolTipText("Build system and load source...");
 		simToolBar.add(btnBuildAndLoad);
+		
+		simToolBar.addSeparator();
+		
+		JButton btnBuildSystem = new JButton("");
+		btnBuildSystem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.buildSystem();
+			}
+		});
+		btnBuildSystem.setIcon(new ImageIcon(MainWindow.class.getResource("/qmips/icons/build.png")));
+		btnBuildSystem.setToolTipText("Build system");
+		simToolBar.add(btnBuildSystem);
 		
 		simToolBar.addSeparator();
 		
@@ -228,8 +330,6 @@ public class MainWindow extends JFrame {
 		btnRun.setIcon(new ImageIcon(MainWindow.class.getResource("/qmips/icons/play_cycles.png")));
 		btnRun.setToolTipText("Run for...");
 		simToolBar.add(btnRun);
-
-		simToolBar.addSeparator();
 		
 		JButton btnResetSignal = new JButton("");
 		btnResetSignal.setToolTipText("Reset signal");
@@ -281,15 +381,16 @@ public class MainWindow extends JFrame {
 
 	}
 
-	public void displayDevicesViews(Map<String, Device> views) {
+	public void displayDevicesViews(Map<String, JPanel> views) {
 		if(shownDevices == null)
-			shownDevices = new HashMap<String, Device>();
+			shownDevices = new HashMap<String, JPanel>();
 		else
 			hideDevicesViews();
-		for (Map.Entry<String, Device> view : views.entrySet()) {
+		for (Map.Entry<String, JPanel> view : views.entrySet()) {
 			JInternalFrame jif = new JInternalFrame();
-			JPanel vp = view.getValue().display();
+			JPanel vp = view.getValue();
 			jif.setMaximizable(true);
+			jif.setIconifiable(true);
 			jif.setResizable(true);
 			jif.setTitle(view.getKey());
 			jif.setContentPane(vp);
@@ -361,10 +462,10 @@ public class MainWindow extends JFrame {
 	}
 	
 	private void arrangeInternalFrames(){
-		Map<String, Device> aux = new HashMap<String, Device>();
+		Map<String, JPanel> aux = new HashMap<String, JPanel>();
 		if(shownDevices!= null)
 			if(!shownDevices.isEmpty()){
-				for(Map.Entry<String, Device> view : shownDevices.entrySet()){
+				for(Map.Entry<String, JPanel> view : shownDevices.entrySet()){
 					aux.put(view.getKey(), view.getValue());
 				}
 				hideDevicesViews();
@@ -386,9 +487,9 @@ public class MainWindow extends JFrame {
 
 		void dismountSystem();
 
-		void loadSource(File file, int start);
+		boolean loadSource(File file, int start);
 
-		void buildAndLoadSource(File file, int start);
+		boolean buildAndLoadSource(File file, int start);
 
 		void killSimulationThread();
 

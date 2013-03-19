@@ -120,6 +120,7 @@ public class QuantumControl extends Device{
 				QuantumState qs = new QuantumState();
 				qs.add(new Complex(1.0,0.0), new ClassicState(new byte[32]));
 				qarray.setState(qs);
+				disp.updateText(qarray.getState().toString());
 			}
 			
 		});

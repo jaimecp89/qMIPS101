@@ -1,10 +1,15 @@
 package qmips.presentation.swing.fancy;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import qmips.compiler.MIPSCompiler;
+import qmips.devices.Device;
 import qmips.devices.clock.Clock;
 import qmips.devices.control.ControlUnit;
 import qmips.devices.memory.IMemory;
@@ -98,7 +103,11 @@ public class MainWindowController implements MainWindow.Controller {
 		this.rst = builder.getResetBus();
 		this.control = builder.getControlUnit();
 		this.instr = builder.getInstrMemory();
-		view.displayDevicesViews(builder.getDisplayableDevices());
+		Map<String, JPanel> views = new HashMap<String, JPanel>();
+		for(Entry<String, Device> e: builder.getDisplayableDevices().entrySet()){
+			views.put(e.getKey(), e.getValue().display());
+		}
+		view.displayDevicesViews(views);
 		this.clockThread = builder.getClock().startRunning();
 		systemBuilt = true;
 		Log.inf.println("System successfully built in "
@@ -114,7 +123,7 @@ public class MainWindowController implements MainWindow.Controller {
 	}
 
 	@Override
-	public void loadSource(File file, int start) {
+	public boolean loadSource(File file, int start) {
 		if (testBuild()) {
 			compilerFile = file;
 
@@ -146,8 +155,8 @@ public class MainWindowController implements MainWindow.Controller {
 			}.execute();
 
 			view.displayModalInfo("Compiling...", false);
-
-		}
+			return true;
+		}else return false;
 	}
 
 	@Override
@@ -170,9 +179,9 @@ public class MainWindowController implements MainWindow.Controller {
 	}
 
 	@Override
-	public void buildAndLoadSource(File file, int start) {
+	public boolean buildAndLoadSource(File file, int start) {
 		buildSystem();
-		loadSource(file, start);
+		return loadSource(file, start);
 	}
 
 	private boolean testBuild() {
