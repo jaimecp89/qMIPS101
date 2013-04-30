@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import domain.engine.math.Complex;
+import domain.engine.quantum.maps.NativeMap;
 import domain.engine.quantum.maps.ArraySortedMap;
 import domain.engine.quantum.maps.IterableMap;
 import domain.engine.quantum.maps.IterableTreeMap;
@@ -12,11 +13,31 @@ import domain.engine.quantum.maps.IterableTreeMap;
 
 public class QuantumState implements Iterable<Entry<ClassicState, Complex>> {
 
+	public static final int TREEMAPTYPE = 1, ARRAYSORTEDMAPTYPE = 2, 
+			NATIVETREEMAP = 3, NATIVEARRAYMAP = 4;
 	private IterableMap qState;
 
 	public QuantumState() {
 		qState = new IterableTreeMap();
-		//qState = new ArraySortedMap();
+	}
+	
+	public QuantumState(int mapType){
+		switch(mapType){
+		case TREEMAPTYPE:
+			qState = new IterableTreeMap();
+			break;
+		case ARRAYSORTEDMAPTYPE:
+			qState = new ArraySortedMap();
+			break;
+		case NATIVETREEMAP:
+			qState = new NativeMap();
+			break;
+		case NATIVEARRAYMAP:
+			System.err.println("Native array map not implmented yet.");
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown map type.");
+		}
 	}
 
 	public void add(Complex coef, ClassicState cs) {
@@ -56,7 +77,7 @@ public class QuantumState implements Iterable<Entry<ClassicState, Complex>> {
 	private class StringIterator implements Iterator<String> {
 
 		Iterator<Entry<ClassicState, Complex>> it = qState.entrySet().iterator();
-		int length = qState.size();;
+		int length = qState.size();
 		int cont = 0;
 
 		public String next() {

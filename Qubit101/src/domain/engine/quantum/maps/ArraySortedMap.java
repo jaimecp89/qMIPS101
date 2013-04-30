@@ -1,6 +1,7 @@
 package domain.engine.quantum.maps;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +13,7 @@ public class ArraySortedMap implements IterableMap{
 	 
 	private Entry<ClassicState, Complex>[] amap;
 	private int stateSize;
+	private static final Complex ZERO = new Complex();
 
 	@Override
 	public void clear() {
@@ -34,20 +36,23 @@ public class ArraySortedMap implements IterableMap{
 
 	@Override
 	public Set<Entry<ClassicState, Complex>> entrySet() {
-		return null;
+		Set<Entry<ClassicState, Complex>> s = new HashSet<Entry<ClassicState, Complex>>();
+		for(Entry<ClassicState, Complex> e : amap){
+			s.add(e);
+		}
+		return s;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Complex get(Object arg0) {
 		if(amap == null){ 
-			stateSize = ((ClassicState)arg0).getState().length; 
-			amap = new Entry[(int)Math.pow(2, stateSize)];
+			return ZERO;
 		}
 		Entry<ClassicState, Complex> aux = amap[classicStateToInt((ClassicState)arg0)];
 		if(aux != null)
 			return aux.getValue();
-		return null;
+		return ZERO;
 	}
 
 	@Override
@@ -60,7 +65,11 @@ public class ArraySortedMap implements IterableMap{
 
 	@Override
 	public Set<ClassicState> keySet() {
-		return null;
+		Set<ClassicState> res = new HashSet<ClassicState>();
+		for(Entry<ClassicState, Complex> aux : amap){
+			res.add(aux.getKey());
+		}
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -71,14 +80,18 @@ public class ArraySortedMap implements IterableMap{
 			amap = new Entry[(int)Math.pow(2, stateSize)];
 		}
 		Complex aux = get(arg0);
-		amap[classicStateToInt(arg0)] = new MyEntry(arg0, arg1);
+		if(arg1.equals(ZERO)){
+			amap[classicStateToInt(arg0)] = null;
+		}else
+			amap[classicStateToInt(arg0)] = new MyEntry(arg0, arg1);
 		return aux;
 	}
 
 	@Override
 	public void putAll(Map<? extends ClassicState, ? extends Complex> arg0) {
-		// TODO Auto-generated method stub
-		
+		for(Map.Entry<? extends ClassicState, ? extends Complex> e: arg0.entrySet()){
+			put(e.getKey(), e.getValue());
+		}
 	}
 
 	@Override
