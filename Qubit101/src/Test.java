@@ -13,9 +13,10 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 		System.load(new File("src/lib/qMIPS101JNI.dll").getAbsolutePath());
-		QuantumState qs = new QuantumState();
+		QuantumState qs = new QuantumState(QuantumState.NATIVEARRAYMAPTYPE);
 		qs.add(new Complex(1.0,0.0), new ClassicState(new byte[]{1,0,1}));
-		System.out.println(qs.stringIterator().next());
+		qs.add(new Complex(1.0,0.0), new ClassicState(new byte[]{1,1,1}));
+		System.out.println(qs);
 //		NativeMap nm = new NativeMap();
 //		nm.put(new ClassicState(new byte[]{1,0,1}), new Complex(1.0,0.0));
 //		System.out.println(nm.get(new ClassicState(new byte[]{1,0,1})));

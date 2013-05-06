@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import domain.engine.math.Complex;
+import domain.engine.quantum.maps.NativeArrayMap;
 import domain.engine.quantum.maps.NativeMap;
 import domain.engine.quantum.maps.ArraySortedMap;
 import domain.engine.quantum.maps.IterableMap;
@@ -13,8 +14,10 @@ import domain.engine.quantum.maps.IterableTreeMap;
 
 public class QuantumState implements Iterable<Entry<ClassicState, Complex>> {
 
+	private static final Complex ZERO = new Complex();
+	
 	public static final int TREEMAPTYPE = 1, ARRAYSORTEDMAPTYPE = 2, 
-			NATIVETREEMAP = 3, NATIVEARRAYMAP = 4;
+			NATIVETREEMAPTYPE = 3, NATIVEARRAYMAPTYPE = 4;
 	private IterableMap qState;
 
 	public QuantumState() {
@@ -29,11 +32,11 @@ public class QuantumState implements Iterable<Entry<ClassicState, Complex>> {
 		case ARRAYSORTEDMAPTYPE:
 			qState = new ArraySortedMap();
 			break;
-		case NATIVETREEMAP:
+		case NATIVETREEMAPTYPE:
 			qState = new NativeMap();
 			break;
-		case NATIVEARRAYMAP:
-			System.err.println("Native array map not implmented yet.");
+		case NATIVEARRAYMAPTYPE:
+			qState = new NativeArrayMap();
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown map type.");
@@ -45,9 +48,9 @@ public class QuantumState implements Iterable<Entry<ClassicState, Complex>> {
 		if (tmp != null) {
 			tmp = tmp.add(coef);
 			qState.put(cs, tmp);
-			if (tmp.equals(new Complex()))
+			if (tmp.equals(ZERO))
 				qState.remove(cs);
-		} else if (!coef.equals(new Complex()))
+		} else if (!coef.equals(ZERO))
 			qState.put(cs, coef);
 	}
 

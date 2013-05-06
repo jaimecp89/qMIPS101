@@ -20,7 +20,7 @@ public class ComplexityTest {
 		for(int x = 0; x < iterations; x++){
 			byte[] b = new byte[qubits];
 			ClassicState cs = new ClassicState(b);
-			QuantumState qs = new QuantumState(QuantumState.NATIVETREEMAP);
+			QuantumState qs = new QuantumState(QuantumState.NATIVEARRAYMAPTYPE);
 			qs.add(new Complex(1.0,0.0), cs);
 			HadamardGate hg = new HadamardGate();
 			for(int i = 0; i < b.length; i++){

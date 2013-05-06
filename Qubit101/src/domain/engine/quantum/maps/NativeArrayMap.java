@@ -8,15 +8,9 @@ import java.util.Set;
 import domain.engine.math.Complex;
 import domain.engine.quantum.ClassicState;
 
-public class NativeMap implements IterableMap{
+public class NativeArrayMap implements IterableMap{
 
-	public long ref;
-	
-	public NativeMap(){
-		init();
-	}
-	
-	public native void init();
+public long ref;
 	
 	@Override
 	public void clear(){_clear(ref);}
@@ -105,4 +99,5 @@ public class NativeMap implements IterableMap{
 	}
 	
 	
+
 }
