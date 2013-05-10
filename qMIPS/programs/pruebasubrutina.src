@@ -1,0 +1,15 @@
+.text 0
+
+addi R2, R2, 5
+jal etq3
+jal etq2
+addi R2, R2, 15
+trap 0
+
+etq3:
+addi R2, R2, 10
+jr R31
+
+etq2:
+addi R3,R3, 1000
+jr R31

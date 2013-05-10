@@ -2,7 +2,7 @@
 .text 0
 addi R1,R1,200
 addi R2,R2,201
-bne R1,R2, etq
+jal etq
 addi R1, R1, 0x1
 
 etq

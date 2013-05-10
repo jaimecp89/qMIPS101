@@ -84,14 +84,14 @@ public class QuantumMIPS implements Builder{
 		Bus iOrD = new Bus(1);
 		Bus memRead = new Bus(1);
 		Bus memWrite = new Bus(1);
-		Bus memToReg = new Bus(2);
+		Bus memToReg = new Bus(3);
 		Bus irWrite = new Bus(1);
 		Bus pcSource = new Bus(2);
 		Bus aluOp = new Bus(2);
 		Bus aluSrcB = new Bus(2);
 		Bus aluSrcA = new Bus(1);
 		Bus regWrite = new Bus(1);
-		Bus regDst = new Bus(1);
+		Bus regDst = new Bus(2);
 		Bus solPCWrite = new Bus(1);
 		Bus aluControl = new Bus(4);
 		
@@ -152,10 +152,10 @@ public class QuantumMIPS implements Builder{
 		new Multiplexer(iOrD, new Bus[]{instrPtr, wbBus}, addr);
 		
 		//2
-		new Multiplexer(regDst, new Bus[]{instr.getRange(16, 21), instr.getRange(11, 16)}, selW);
+		new Multiplexer(regDst, new Bus[]{instr.getRange(16, 21), instr.getRange(11, 16), new Bus(31,5)}, selW);
 		
 		//3
-		new Multiplexer(memToReg, new Bus[]{wbBus,memDataToMux, aluOutHighToMux, mResult}, wrtData);
+		new Multiplexer(memToReg, new Bus[]{wbBus,memDataToMux, aluOutHighToMux, mResult, instrPtr}, wrtData);
 		
 		//4
 		new Multiplexer(aluSrcA, new Bus[]{instrPtr, dataARegOut}, aluDataA);
@@ -174,7 +174,7 @@ public class QuantumMIPS implements Builder{
 		new ShiftLeft(sExtToMuxAlu, shftToMuxAlu, 2);
 		
 		//2
-		new ShiftLeft(instr.getRange(0, 26), shftToJumpMux, 0);
+		new ShiftLeft(instr.getRange(0, 26), shftToJumpMux, 2);
 		
 		//Concatenator
 		new Concat(new Bus[]{instrPtr.getRange(28, 32), shftToJumpMux}, concatToMux);

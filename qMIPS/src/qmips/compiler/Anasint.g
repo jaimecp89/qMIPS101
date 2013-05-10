@@ -47,10 +47,10 @@ options{
 			String label = (String)e.getValue()[1];
 			if(!labelMap.containsKey(label))
 				throw new RuntimeException("Label: " + label +  " not declared.");
-			if(opcode == 0x2){
-				int addr =  ((labelMap.get(label) - e.getKey()-4)/4) & 0x0000FFFF;	
+			if(opcode == 0x2 || opcode == 0x3){
+				int addr =  (labelMap.get(label)/4) & 0x0000FFFF;	
 				instrMem.load(new LogicVector((opcode << 26) + addr, 32), e.getKey());
-			}	else {
+			}else{
 			  int addr = ((labelMap.get(label) - e.getKey()-4)/4) & 0x0000FFFF; 
 			  int s = (Integer)e.getValue()[2];
 			  int t = (Integer)e.getValue()[3];
@@ -106,6 +106,7 @@ body : logicArithmetic
 	 | load 
 	 | store
 	 | jump
+	 | jumpr
 	 | branch
 	 | quantum
 	 | trap
@@ -139,7 +140,7 @@ immediate :
 		  ;		
 					
 immediateName returns[int opcode = 0] 
-			  : ADDI  {opcode = 0x8;}
+		  : ADDI  {opcode = 0x8;}
   		  | ADDIU {opcode = 0x9;}
   		  | ORI   {opcode = 0xD;}
   		  | SLTI  {opcode = 0xA;}
@@ -182,8 +183,15 @@ jump :
      ;
      
 jumpName returns[int opcode = 0] 
-         : J {opcode = 0x2;}
+         : J   {opcode = 0x2;}
+         | JAL {opcode = 0x3;}
          ;
+         
+jumpr:
+	{int s;}
+	JR s = iregister
+	{instrMem.load(new LogicVector((0x1B << 26) + (s << 21),32), pc); pc = pc + 4;}
+	;
          
 branch : 
        {int opcode, s, t, addr;}

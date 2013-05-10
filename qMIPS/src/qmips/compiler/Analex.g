@@ -83,7 +83,7 @@ protected CHAR: 'a'..'z';
 NUMBER: DIGIT (DIGIT)*;
 NUMDOUBLE: DIGIT "." (DIGIT)*;
 HEXADECIMAL : "0x" (DIGIT | 'a'..'f') (DIGIT | 'a'..'f')*;
-STRING: (CHAR)(CHAR)*;
+STRING: (CHAR|DIGIT)(CHAR|DIGIT)*;
 
 MHEX: '-' HEXADECIMAL;
 MDEC: '-' NUMBER;
