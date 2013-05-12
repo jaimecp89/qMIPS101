@@ -94,6 +94,7 @@ public class QuantumMIPS implements Builder{
 		Bus regDst = new Bus(2);
 		Bus solPCWrite = new Bus(1);
 		Bus aluControl = new Bus(4);
+		Bus aluHighWrite = new Bus(1);
 		
 		Bus target = new Bus(1);
 		Bus qExe = new Bus(1);
@@ -129,7 +130,7 @@ public class QuantumMIPS implements Builder{
 		new SynchronousRegister(aluOut, wbBus, new Bus(1,1), rst, clk);
 		
 		//ALU out high
-		new SynchronousRegister(aluOutHigh, aluOutHighToMux, new Bus(1,1), rst, clk);
+		new SynchronousRegister(aluOutHigh, aluOutHighToMux, aluHighWrite, rst, clk);
 		
 		//Integer register file
 		displayable.put("Register file", new RegisterFile(instr.getRange(21, 26), instr.getRange(16, 21), dataARegIn, dataBRegIn, selW, regWrite, wrtData, rst, clk));
@@ -155,7 +156,7 @@ public class QuantumMIPS implements Builder{
 		new Multiplexer(regDst, new Bus[]{instr.getRange(16, 21), instr.getRange(11, 16), new Bus(31,5)}, selW);
 		
 		//3
-		new Multiplexer(memToReg, new Bus[]{wbBus,memDataToMux, aluOutHighToMux, mResult, instrPtr}, wrtData);
+		new Multiplexer(memToReg, new Bus[]{wbBus, memDataToMux, aluOutHighToMux, mResult, instrPtr}, wrtData);
 		
 		//4
 		new Multiplexer(aluSrcA, new Bus[]{instrPtr, dataARegOut}, aluDataA);
@@ -189,7 +190,7 @@ public class QuantumMIPS implements Builder{
 		new Logic(instr.getRange(26, 27), aluFlags.getRange(2, 3), xorToAnd, Logic.XOR);
 		
 		//Control unit
-		control = new QuantumMIPSControlUnit(pcWriteCond, pcWrite, iOrD, memRead, memWrite, memToReg, irWrite, pcSource, aluOp, aluSrcB, aluSrcA, regWrite, regDst, solPCWrite, aluControl, target, qExe, aluFlags.getRange(0, 1), instr.getRange(26, 32), clk, rst);
+		control = new QuantumMIPSControlUnit(pcWriteCond, pcWrite, iOrD, memRead, memWrite, memToReg, irWrite, pcSource, aluOp, aluSrcB, aluSrcA, regWrite, regDst, solPCWrite, aluControl, aluHighWrite, target, qExe, aluFlags.getRange(0, 1), instr.getRange(26, 32), clk, rst);
 		displayable.put("Control unit", (Device)control);
 		
 	}

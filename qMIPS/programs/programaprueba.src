@@ -1,11 +1,8 @@
 .byte 200 0x7
 .text 0
 addi R1,R1,200
-addi R2,R2,201
-jal etq
-addi R1, R1, 0x1
-
-etq
-addi R2,R2, 0x1
+addi R2,R2,101
+div R3, R1, R2
+mfhi R4
 
 trap 0

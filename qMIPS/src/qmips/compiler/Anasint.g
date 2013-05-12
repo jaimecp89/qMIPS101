@@ -108,6 +108,7 @@ body : logicArithmetic
 	 | jump
 	 | jumpr
 	 | branch
+	 | mfhi
 	 | quantum
 	 | trap
 	 ;
@@ -207,6 +208,11 @@ branchName returns[int opcode = 0]
            : BEQ {opcode = 0x4;}
            | BNE {opcode = 0x5;}
            ;
+           
+mfhi : {int s;}
+	 MFHI s = iregister
+	 {instrMem.load(new LogicVector((0x1C << 26) + (s << 16), 32), pc); pc = pc+4;}
+	 ;
          
 quantum : 
         {int target, control, func;}

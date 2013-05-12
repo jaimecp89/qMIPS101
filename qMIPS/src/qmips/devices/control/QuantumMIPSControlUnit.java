@@ -23,8 +23,8 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 	Bus machineNotify;
 	Bus pcWriteCond, pcWrite, iOrD, memRead, memWrite, memToReg, irWrite,
 			pcSource, aluOp, aluSrcB, aluSrcA, regWrite, regDst, solPCWrite,
-			aluControl, target, qExe, aluOverf;
-	State ife, id, mac, mar, maw, mrc, rew, exe, imm, rc, bc, jc, jal, jrf, jrc, qt, qex, qmea, trap;
+			aluControl, aluHighWrite, target, qExe, aluOverf;
+	State ife, id, mac, mar, maw, mrc, rew, exe, imm, rc, bc, jc, jal, jrf, jrc, mfhi, qt, qex, qmea, trap;
 	State current, next;
 	IControlUnitDisplay disp;
 	int trapNum = -1;
@@ -32,7 +32,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 	public QuantumMIPSControlUnit(Bus pcWriteCond, Bus pcWrite, Bus iOrD,
 			Bus memRead, Bus memWrite, Bus memToReg, Bus irWrite, Bus pcSource,
 			Bus aluOp, Bus aluSrcB, Bus aluSrcA, Bus regWrite, Bus regDst,
-			Bus solPCWrite, Bus aluControl, Bus target, Bus qExe, Bus aluOverf, Bus opcode, Bus clk, Bus rst) {
+			Bus solPCWrite, Bus aluControl, Bus aluHighWrite, Bus target, Bus qExe, Bus aluOverf, Bus opcode, Bus clk, Bus rst) {
 		this.pcWriteCond = pcWriteCond;
 		this.pcWrite = pcWrite; 
 		this.iOrD = iOrD;
@@ -48,6 +48,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 		this.regDst = regDst; 
 		this.solPCWrite = solPCWrite;
 		this.aluControl = aluControl; 
+		this.aluHighWrite = aluHighWrite;
 		this.target = target;
 		this.qExe = qExe; 
 		this.aluOverf = aluOverf;
@@ -200,6 +201,9 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				case 0x1B: //JR
 					next = jrf;
 					break;
+				case 0x1C: //MFHI
+					next = mfhi;
+					break;
 				}
 			}
 			
@@ -304,6 +308,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				aluSrcA.write(1, 1);
 				aluSrcB.write(0, 2);
 				aluOp.write(2, 2);
+				aluHighWrite.write(1,1);
 				disp.setState("EXE", "Execution");
 			}
 
@@ -338,6 +343,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				regDst.write(1, 2);
 				regWrite.write(1, 1);
 				memToReg.write(0, 3);
+				aluHighWrite.write(0,1);
 				disp.setState("RC", "Register write");
 			}
 
@@ -427,6 +433,24 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				pcWrite.write(1, 1);
 				pcSource.write(0, 2);
 				disp.setState("JRC", "Jump to register completion");
+			}
+
+			@Override
+			public void setTransition() {
+				next = ife;
+			}
+			
+		};
+		
+		mfhi = new State(){
+
+			@Override
+			public void setOutput() {
+				regDst.write(0, 2);
+				memToReg.write(2, 3);
+				regWrite.write(1, 1);
+				
+				disp.setState("MFHI", "Move from high");
 			}
 
 			@Override
