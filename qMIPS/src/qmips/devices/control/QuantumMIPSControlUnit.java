@@ -195,7 +195,6 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 					next = qt;
 					break;
 				case 0x1A: //TRAP
-					trapNum = 0;
 					next = trap;
 					break;
 				case 0x1B: //JR
@@ -522,6 +521,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 
 			@Override
 			public void setOutput() {
+				trapNum = 0;
 				disp.setState("TRAP", "Exception " + trapNum);
 			}
 
@@ -557,6 +557,11 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 	@Override
 	public int checkTrap() {
 		return trapNum;
+	}
+
+	@Override
+	public void releaseTrap() {
+		trapNum = -1;
 	}
 
 }

@@ -1,0 +1,13 @@
+.text 0
+
+qx Q1, Q1
+qx Q0, Q0
+
+trap 0
+
+qx Q0, Q0
+qx Q1, Q1
+
+
+
+trap 0

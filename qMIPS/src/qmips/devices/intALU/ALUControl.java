@@ -40,6 +40,15 @@ public class ALUControl extends Device{
 					break;
 				default:
 					switch(func.read().toInteger()){
+					case 0x00: //SLL
+						aluControl.write(12, 4);
+						break;
+					case 0x02: //SRL
+						aluControl.write(13, 4);
+						break;
+					case 0x03: //SRA
+						aluControl.write(14, 4);
+						break;
 					case 0x20://ADD
 						aluControl.write(new LogicVector(2, 4));
 						break;

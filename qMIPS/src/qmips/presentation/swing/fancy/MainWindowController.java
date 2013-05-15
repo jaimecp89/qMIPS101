@@ -136,13 +136,17 @@ public class MainWindowController implements MainWindow.Controller {
 							+ compilerFile.getName() + "\"...");
 					long t = System.currentTimeMillis();
 					try {
-						MIPSCompiler.compile(compilerFile, instr);
+						err = !MIPSCompiler.compile(compilerFile, instr);
 					} catch (Exception e) {
 						err = true;
 						Log.err.println("Compilation error: " + e.getMessage());
 					}
 					if (!err)
 						Log.inf.println("Successful compilation in: "
+								+ (System.currentTimeMillis() - t)
+								+ " miliseconds.");
+					else
+						Log.err.println("Compilation ended with errors in: "
 								+ (System.currentTimeMillis() - t)
 								+ " miliseconds.");
 					return null;
@@ -198,6 +202,13 @@ public class MainWindowController implements MainWindow.Controller {
 		SyncShortcut.sync = new PoolSync();
 		clockThread = clk.startRunning();
 		view.hideModalInfo();
+	}
+	
+	public void releaseTrap(){
+		if (testBuild()) {
+			control.releaseTrap();
+			Log.inf.println("Trap reseted.");
+		}
 	}
 
 }

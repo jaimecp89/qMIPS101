@@ -60,6 +60,8 @@ tokens{
   QMEA = "qmea";
   QPHS = "qphs";
   QRST = "qrst";
+  QCNT = "qcnt";
+  QOFF = "qoff";
   
   TRAP = "trap";
   

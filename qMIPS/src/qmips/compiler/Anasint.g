@@ -6,6 +6,7 @@ header{
 	import java.util.Map.Entry;
 	import java.util.HashMap;
 	import java.util.Set;
+	import java.util.Vector;
 }
 
 class Anasint extends Parser;
@@ -21,12 +22,14 @@ options{
 	private int pc = 0;
 	private Map<String, Integer> labelMap;
 	private Map<Integer, Object[]> solveLater;
+	private Vector<String> compilationErrors;
 	
 	public Anasint(Analex l, IMemory instrMem){
 		this(l);
 		this.instrMem = instrMem;
 		this.labelMap = new HashMap<String, Integer>();
 		this.solveLater = new HashMap<Integer, Object[]>();
+		this.compilationErrors = new Vector<String>();
 	}
 	
 	public Anasint(Analex l, IMemory instrMem, IMemory dataMem){
@@ -58,11 +61,22 @@ options{
 			}
 		}
 	}
+	
+  	@Override
+  	public void reportError(RecognitionException ex){
+    	compilationErrors.add(ex.getMessage());
+    	try{
+    		recover(ex,_tokenSet_0);
+    	}catch(Exception e){
+    		compilationErrors.add(e.getMessage());
+    	}
+  	}
+
 
 }
 
 
-program : (dataDirective)* (textDirective)+  EOF {solveLabels();}
+program returns[Vector<String> res = null;]: (dataDirective)* (textDirective)+  EOF {solveLabels(); res = compilationErrors;}
 		;
 
 dataDirective : {int x; int[] v;}(BYTE x=integer v=value 
@@ -120,7 +134,10 @@ logicArithmetic :
 				;
 			 
 logicArithmeticName returns[int funct = 0] 
-					: ADD  {funct =  0x20;}
+					: SLL  {funct =  0x00;}
+					| SRL  {funct =  0x02;}
+					| SRA  {funct =  0x03;}
+					| ADD  {funct =  0x20;}
   					| ADDU {funct =  0x21;}
   					| SUB  {funct =  0x22;}
   					| SUBU {funct =  0x23;}
@@ -230,6 +247,14 @@ quantum :
         {int reg;}
         QRST reg=iregister
         {instrMem.load(new LogicVector((0x0C << 26) + (reg << 21) + 0x1B, 32), pc); pc = pc+4;}
+        |
+        {int reg;}
+        QCNT reg=iregister
+        {instrMem.load(new LogicVector((0x0C << 26) + (reg << 21) + 0x1C, 32), pc); pc = pc+4;}
+        |
+        {int reg;}
+        QOFF reg=iregister
+        {instrMem.load(new LogicVector((0x0C << 26) + (reg << 21) + 0x1D, 32), pc); pc = pc+4;}
         ;
         
 quantumName returns[int func = -1]

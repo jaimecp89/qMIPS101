@@ -4,4 +4,6 @@ public interface ControlUnit {
 
 	public int checkTrap();
 	
+	public void releaseTrap();
+	
 }

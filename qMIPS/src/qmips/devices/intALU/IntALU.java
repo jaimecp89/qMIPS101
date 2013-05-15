@@ -31,7 +31,7 @@ public class IntALU extends Device {
 		NOR = 11,
 		SLL = 12, 
 		SRL = 13, 
-		SRA = 14, 
+		SRA = 14,
 		SLT = 15;
 
 	public IntALU(Bus a, Bus b, Bus op, Bus outputlow, Bus outputhi, Bus flags) {

@@ -183,6 +183,16 @@ public class MainWindow extends JFrame {
 			}
 		});
 		mnSimulation.add(mntmResetSignal);
+		
+		mnSimulation.addSeparator();
+		
+		JMenuItem mntmContinue = new JMenuItem("Continue");
+		mntmContinue.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.releaseTrap();
+			}
+		});
+		mnSimulation.add(mntmContinue);
 
 		JMenu mnHelp = new JMenu("Help");
 		mainMenu.add(mnHelp);
@@ -342,6 +352,16 @@ public class MainWindow extends JFrame {
 		btnResetSignal.setIcon(new ImageIcon(MainWindow.class.getResource("/qmips/icons/reset.png")));
 		simToolBar.add(btnResetSignal);
 		
+		JButton btnContinue = new JButton("");
+		btnContinue.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				controller.releaseTrap();
+			}
+		});
+		btnContinue.setIcon(new ImageIcon(MainWindow.class.getResource("/qmips/icons/continue.png")));
+		simToolBar.add(btnContinue);
+		
 		simToolBar.addSeparator();
 		
 		JButton btnArrangewindows = new JButton("");
@@ -476,6 +496,8 @@ public class MainWindow extends JFrame {
 	interface Controller {
 
 		void runOneCycle();
+
+		void releaseTrap();
 
 		void runCycles(int cycles);
 

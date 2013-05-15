@@ -110,4 +110,7 @@ public class MonocycleControlUnit extends Device implements ControlUnit{
 		return -1;
 	}
 
+	@Override
+	public void releaseTrap() {}
+
 }

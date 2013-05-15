@@ -1,0 +1,102 @@
+/*
+This is an example of the Shor's factoring quantum algorithm.
+It takes a number from 0 to 15 stored in the 0x500 address and
+tries to find one of its prime factors, storing it in R1.
+*/
+
+.word 0x500 21
+.text 0
+
+//Init stack pointer
+addi R29, R0, 0x600
+
+//Load the data from memory address 0x500
+
+addi R21, R21, 0x500
+lw R21, 0(R21) //Load number 'N' from memory
+
+//Main algorithm
+
+main:
+jal rnd15               //Random number 'a' to R22
+beq R0, R22, main       //If random number is 0 try again
+div R23, R21, R22
+mfhi R24                //Find if 'a' is a factor of 'N'
+beq R0, R24, aIsFactor  //If 'a' is a factor of 'N' we are done
+jal quantum             //Else, we use the quantum part of the algorithm
+j end
+
+aIsFactor:
+add R1, R22, R0
+j end
+
+end:
+trap 0
+
+//end main
+
+//Subroutine that generates a random number from 0 to 15 and stores it in R22
+
+rnd15:
+xor R22, R22, R22      //Clean R22
+qrst R22               //Quatum register to ground state
+qhad Q0, Q0            //Generate superposition
+qhad Q1, Q1
+qhad Q2, Q2
+qhad Q3, Q3
+qmea Q0, R22, 0        //Measure each qubit into R22
+qmea Q1, R23, 1
+or R22, R23, R22
+qmea Q2, R23, 2
+or R22, R23, R22
+qmea Q3, R23, 3
+or R22, R23, R22
+jr R31                 //Return to main program
+
+//end rnd15
+
+//*******************************************//
+
+//Quantum subroutine that creates a superposition of 
+//states (inputs) and computes f(x)=a^x mod M over them.
+
+quantum:
+qrst R0             //Quantum unit to ground state
+qhad Q0, Q0         //We need 8 (= 2*n) qubits in superposition
+qhad Q1, Q1
+qhad Q2, Q2
+qhad Q3, Q3
+qhad Q4, Q4
+qhad Q5, Q5
+qhad Q6, Q6
+qhad Q7, Q7
+
+xor R10, R10, R10  //Clean R10 to use it as iteration counter
+addi R11, R0, 7    //We need to run 8 (0 - 7) iterations of the algorithm
+
+loop:
+sw 0(R29), R31     //Push return address
+addi R29, R29, 4   //Increase stack pointer
+
+qcnt R10           //Set the control qubit for this iteration
+jal modexp         //Call the modular exponentiation algorithm
+qcnt R10           //Unset the control qubit
+
+lw R31, 0(29)      //Pull the return address
+subi R29, R29, 4   //Decrease the stack pointer
+
+bne R10, R11, loop //Another iteration if not ended
+
+jr R31
+//end quantum
+
+//*******************************************//
+
+//Modular exponentiation quantum function
+
+modex:
+
+jr R31
+//end modex
+
+//*******************************************//
