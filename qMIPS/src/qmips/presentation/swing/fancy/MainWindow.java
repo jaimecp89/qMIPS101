@@ -37,6 +37,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
+import qmips.compiler.CompilationResults;
+import qmips.compiler.Instruction;
 import qmips.presentation.swing.fancy.onyxbits.Usher;
 
 /**
@@ -55,6 +57,7 @@ public class MainWindow extends JFrame {
 	private JWindow cyclesPopUp;
 	private JButton btnRun;
 	private JTextField cyclesText;
+	private ProgramProgressView ppv;
 	private Map<String, JPanel> shownDevices;
 	
 
@@ -88,18 +91,9 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				File f;
 				if ((f = askForFile()) != null){
-					if(controller.loadSource(f, 0)){
-						JInternalFrame jif = new JInternalFrame();
-						JPanel vp = new SourceCodeView(f, controller);
-						jif.setMaximizable(true);
-						jif.setIconifiable(true);
-						jif.setResizable(true);
-						jif.setTitle(f.getAbsolutePath());
-						jif.setContentPane(vp);
-						jif.setSize(300, 400);
-						mainPane.add(jif);
-						shownDevices.put("SourceView", vp);
-						jif.setVisible(true);
+					CompilationResults res = controller.loadSource(f, 0);
+					if(res != null){
+						createInternalSourceFrames(f, res.getInstructions());
 					}
 				}	
 			}
@@ -111,18 +105,9 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				File f;
 				if ((f = askForFile()) != null){
-					if(controller.buildAndLoadSource(f, 0)){
-						JInternalFrame jif = new JInternalFrame();
-						JPanel vp = new SourceCodeView(f, controller);
-						jif.setMaximizable(true);
-						jif.setIconifiable(true);
-						jif.setResizable(true);
-						jif.setTitle(f.getAbsolutePath());
-						jif.setContentPane(vp);
-						jif.setSize(300, 400);
-						mainPane.add(jif);
-						shownDevices.put("SourceView", vp);
-						jif.setVisible(true);
+					CompilationResults res = controller.loadSource(f, 0);
+					if(res != null){
+						createInternalSourceFrames(f, res.getInstructions());
 					}
 				}
 			}
@@ -225,18 +210,9 @@ public class MainWindow extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				File f;
 				if ((f = askForFile()) != null){
-					if(controller.loadSource(f, 0)){
-						JInternalFrame jif = new JInternalFrame();
-						JPanel vp = new SourceCodeView(f, controller);
-						jif.setMaximizable(true);
-						jif.setIconifiable(true);
-						jif.setResizable(true);
-						jif.setTitle(f.getAbsolutePath());
-						jif.setContentPane(vp);
-						jif.setSize(300, 400);
-						mainPane.add(jif);
-						shownDevices.put("SourceView", vp);
-						jif.setVisible(true);
+					CompilationResults res = controller.loadSource(f, 0);
+					if(res != null){
+						createInternalSourceFrames(f, res.getInstructions());
 					}
 				}
 			}
@@ -250,18 +226,9 @@ public class MainWindow extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				File f;
 				if ((f = askForFile()) != null){
-					if(controller.buildAndLoadSource(f, 0)){
-						JInternalFrame jif = new JInternalFrame();
-						JPanel vp = new SourceCodeView(f, controller);
-						jif.setMaximizable(true);
-						jif.setIconifiable(true);
-						jif.setResizable(true);
-						jif.setTitle(f.getAbsolutePath());
-						jif.setContentPane(vp);
-						jif.setSize(300, 400);
-						mainPane.add(jif);
-						shownDevices.put("SourceView", vp);
-						jif.setVisible(true);
+					CompilationResults res = controller.buildAndLoadSource(f, 0);
+					if(res != null){
+						createInternalSourceFrames(f, res.getInstructions());
 					}
 				}
 			}
@@ -492,6 +459,36 @@ public class MainWindow extends JFrame {
 				displayDevicesViews(aux);
 			}
 	}
+	
+	private void createInternalSourceFrames(File f, Map<Integer, Instruction> instructions){
+		JInternalFrame jif = new JInternalFrame();
+		JPanel vp = new SourceCodeView(f, controller);
+		jif.setMaximizable(true);
+		jif.setIconifiable(true);
+		jif.setResizable(true);
+		jif.setTitle(f.getAbsolutePath());
+		jif.setContentPane(vp);
+		jif.setSize(300, 400);
+		mainPane.add(jif);
+		shownDevices.put("SourceView", vp);
+		jif.setVisible(true);
+		
+		JInternalFrame jif2 = new JInternalFrame();
+		ppv = new ProgramProgressView(instructions);
+		jif2.setMaximizable(true);
+		jif2.setIconifiable(true);
+		jif2.setResizable(true);
+		jif2.setTitle("Program progress view");
+		jif2.setContentPane(ppv);
+		jif2.setSize(300, 400);
+		mainPane.add(jif2);
+		shownDevices.put("ProgramProgressView", ppv);
+		jif2.setVisible(true);
+	}
+	
+	public ProgramProgressView getProgramProgressView(){
+		return ppv;
+	}
 
 	interface Controller {
 
@@ -509,9 +506,9 @@ public class MainWindow extends JFrame {
 
 		void dismountSystem();
 
-		boolean loadSource(File file, int start);
+		CompilationResults loadSource(File file, int start);
 
-		boolean buildAndLoadSource(File file, int start);
+		CompilationResults buildAndLoadSource(File file, int start);
 
 		void killSimulationThread();
 

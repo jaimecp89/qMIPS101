@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import qmips.compiler.CompilationResults;
 import qmips.compiler.MIPSCompiler;
 import qmips.devices.Device;
 import qmips.devices.clock.Clock;
@@ -30,6 +31,7 @@ public class MainWindowController implements MainWindow.Controller {
 	private Thread simulationThread;
 	private Thread clockThread;
 	private File compilerFile;
+	private CompilationResults compilationResults;
 
 	public MainWindowController(Builder builder) {
 		this.builder = builder;
@@ -44,6 +46,8 @@ public class MainWindowController implements MainWindow.Controller {
 				public void run() {
 					if (control.checkTrap() == -1 && !Thread.interrupted()) {
 						clk.runCycles(1);
+						if(control.isIF())
+							view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
 					} else
 						Log.inf.println("Program terminated with code: "
 								+ control.checkTrap());
@@ -65,6 +69,8 @@ public class MainWindowController implements MainWindow.Controller {
 					int num = c;
 					while (control.checkTrap() == -1 && num > 0 && !Thread.interrupted()) {
 						clk.runCycles(1);
+						if(control.isIF())
+							view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
 						num--;
 					}
 					if (control.checkTrap() != -1)
@@ -91,6 +97,8 @@ public class MainWindowController implements MainWindow.Controller {
 				rst.write(0,1);
 			}
 			clk.setCycleCount(0);
+			if(view.getProgramProgressView() != null)
+				view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
 		}
 	}
 
@@ -112,6 +120,7 @@ public class MainWindowController implements MainWindow.Controller {
 		systemBuilt = true;
 		Log.inf.println("System successfully built in "
 				+ (System.currentTimeMillis() - t) + " miliseconds.");
+		resetSignal();
 	}
 
 	@Override
@@ -123,7 +132,7 @@ public class MainWindowController implements MainWindow.Controller {
 	}
 
 	@Override
-	public boolean loadSource(File file, int start) {
+	public CompilationResults loadSource(File file, int start) {
 		if (testBuild()) {
 			compilerFile = file;
 
@@ -136,7 +145,7 @@ public class MainWindowController implements MainWindow.Controller {
 							+ compilerFile.getName() + "\"...");
 					long t = System.currentTimeMillis();
 					try {
-						err = !MIPSCompiler.compile(compilerFile, instr);
+						compilationResults = MIPSCompiler.compile(compilerFile, instr);
 					} catch (Exception e) {
 						err = true;
 						Log.err.println("Compilation error: " + e.getMessage());
@@ -159,8 +168,8 @@ public class MainWindowController implements MainWindow.Controller {
 			}.execute();
 
 			view.displayModalInfo("Compiling...", false);
-			return true;
-		}else return false;
+			return compilationResults;
+		}else return null;
 	}
 
 	@Override
@@ -171,6 +180,8 @@ public class MainWindowController implements MainWindow.Controller {
 				public void run() {
 					while (control.checkTrap() == -1 && !Thread.interrupted()) {
 						clk.runCycles(1);
+						if(control.isIF())
+							view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
 					}
 					Log.inf.println("Program terminated with code: "
 							+ control.checkTrap());
@@ -183,7 +194,7 @@ public class MainWindowController implements MainWindow.Controller {
 	}
 
 	@Override
-	public boolean buildAndLoadSource(File file, int start) {
+	public CompilationResults buildAndLoadSource(File file, int start) {
 		buildSystem();
 		return loadSource(file, start);
 	}

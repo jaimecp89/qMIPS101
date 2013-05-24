@@ -1,6 +1,174 @@
 /*
 
 This is an example of the Grover's Search Algorithm.
-
+It is used to find a index from an unsorted set of them.
+An 'oracle' (here a subroutine) must be defined to identify the right
+solution.
+In this example it will simply try to find the index number stored in 
+the address 0x600 from among the numbers from 0 to 31 (5 qubits).
 
 */
+
+.word 0x600 5        //This is the index the algorithm will try to find.
+
+.text 0
+
+addi R5, R5, 0x600   //Get the index from memory
+lw R5, 0(R5)
+
+qrst R0              //Clean the quantum register
+
+qhad Q0, Q0          //Apply the Hadamard gate to each of the five first
+qhad Q1, Q1				//qubits to create a superposition of their states
+qhad Q2, Q2
+qhad Q3, Q3
+qhad Q4, Q4
+
+qx Q5, Q5            //Set the input for the oracle subspace
+qhad Q5, Q5          //Apply the Hadamard gate to it to change the phase of the answer
+
+addi R2, R0, 4       //The algorithm needs 3 (= ceiling(sqrt(8))) iterations
+					    //of the Grover cycle to find the solution.
+grover:
+
+jal oracle           //1: Call the oracle wich marks the correct solution
+
+qhad Q0, Q0          //2: Create the equally weighted superposition
+qhad Q1, Q1
+qhad Q2, Q2
+qhad Q3, Q3
+qhad Q4, Q4
+
+jal phase            //3: Apply the phase rotation operator
+
+qhad Q0, Q0          //4: Make the superposition collapse
+qhad Q1, Q1
+qhad Q2, Q2
+qhad Q3, Q3
+qhad Q4, Q4
+
+addi R2, R2, -1     //If there are loops remaining...
+bne R2, R0, grover  //...jump to the next iteration
+
+qmea Q0, R1, 0      //Measure each qubit into R1 to store the answer
+qmea Q1, R2, 1
+or R1, R1, R2
+qmea Q2, R2, 2
+or R1, R1, R2
+qmea Q3, R2, 3
+or R1, R1, R2
+qmea Q4, R2, 4
+or R1, R1, R2
+
+trap 0             //Program ended
+
+//*********Phase shift subroutine***********
+
+phase:
+
+qx Q0, Q0
+qx Q1, Q1
+qx Q2, Q2
+qx Q3, Q3
+qx Q4, Q4
+
+addi R20, R0, 0
+qcnt R20
+addi R20, R0, 1
+qcnt R20
+addi R20, R0, 2
+qcnt R20
+addi R20, R0, 3
+qcnt R20
+addi R20, R0, 4
+qcnt R20
+
+qx Q6, Q6
+
+addi R20, R0, 1
+qphs Q0, Q6, R20
+qphs Q1, Q6, R20
+qphs Q2, Q6, R20
+qphs Q3, Q6, R20
+qphs Q4, Q6, R20
+
+qx Q6, Q6
+
+addi R20, R0, 0
+qcnt R20
+addi R20, R0, 1
+qcnt R20
+addi R20, R0, 2
+qcnt R20
+addi R20, R0, 3
+qcnt R20
+addi R20, R0, 4
+qcnt R20
+
+qx Q0, Q0
+qx Q1, Q1
+qx Q2, Q2
+qx Q3, Q3
+qx Q4, Q4
+
+qmea Q6, R20, 0
+beq R20, R0, endphase
+qx Q6, Q6
+
+
+endphase:
+jr R31
+
+//*********End of phase shift subroutine****
+
+//********Oracle**********
+
+oracle:
+addi R8, R0, 5                 //Number of shifts
+addi R9, R0, 1                 //Mask for shift operations
+add R7, R0, R0
+
+setnot:
+srl R6, R5, R7
+and R6, R6, R9
+bne R6, R0, setisone
+qoff R7
+qx Q0, Q0
+setisone:
+addi R7, R7, 1
+bne R7, R8, setnot
+                 
+qoff R0
+add R7, R0, R0
+
+setcontrol:
+qcnt R7
+addi R7, R7, 1
+bne R7, R5, setcontrol
+
+qx Q5, Q5
+
+add R7, R0, R0
+
+unsetcontrol:
+qcnt R7
+addi R7, R7, 1
+bne R7, R5, unsetcontrol
+
+add R7, R0, R0
+
+unsetnot:
+srl R6, R5, R7
+and R6, R6, R9
+bne R6, R0, unsetisone
+qoff R7
+qx Q0, Q0
+unsetisone:
+addi R7, R7, 1
+bne R7, R8, unsetnot
+
+endgrover:
+qoff R0
+jr R31
+
+//*********Oracle end**********

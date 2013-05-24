@@ -1,5 +1,7 @@
 package qmips.devices.quantum;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.swing.JPanel;
@@ -31,7 +33,7 @@ public class QuantumControl extends Device{
 	private Bus param, funct, regValue, qexe, clk, rst, meas;
 	private QubitArray32 qarray;
 	private Display disp;
-	private Vector<Integer> controlQubits;
+	private SortedSet<Integer> controlQubits;
 	private int offset;
 	
 	public QuantumControl(Bus funct, Bus param, Bus regValue, Bus meas, Bus qexe, Bus clk, Bus rst, QubitArray32 qarray){
@@ -43,7 +45,7 @@ public class QuantumControl extends Device{
 		this.clk = clk;
 		this.rst = rst;
 		this.qarray = qarray;
-		this.controlQubits = new Vector<Integer>();
+		this.controlQubits = new TreeSet<Integer>();
 		this.offset = 0;
 		this.disp = new QuantumControlDisplay();
 		disp.updateText(qarray.getState().toString(), Integer.toString(offset), controlQubits.toString());

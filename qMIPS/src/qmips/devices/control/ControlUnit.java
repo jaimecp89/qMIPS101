@@ -6,4 +6,6 @@ public interface ControlUnit {
 	
 	public void releaseTrap();
 	
+	public boolean isIF();
+	
 }

@@ -27,6 +27,7 @@ public class OneCycleMIPS implements Builder {
 	private IMemory instrMemory;
 	private Bus rst;
 	private ControlUnit control;
+	private SynchronousRegister programCounter;
 	
 	@Override
 	public void build() {
@@ -93,7 +94,8 @@ public class OneCycleMIPS implements Builder {
 		new Memory(rdData2, rdData, aluRes, vcc1, memWr, clk, 512);
 
 		// Instruction pointer register
-		displayable.put("Instruction pointer", new SynchronousRegister(nextInstrPtr, instrPtr, vcc1, gnd1, clk));
+		programCounter = new SynchronousRegister(nextInstrPtr, instrPtr, vcc1, gnd1, clk);
+		displayable.put("Instruction pointer", programCounter);
 		
 		// ALU
 		new IntALU(rdData1, aluInput2, aluControl, aluRes, new Bus(32),
@@ -174,6 +176,11 @@ public class OneCycleMIPS implements Builder {
 	@Override
 	public ControlUnit getControlUnit() {
 		return control;
+	}
+
+	@Override
+	public SynchronousRegister programCounter() {
+		return programCounter;
 	}
 
 }

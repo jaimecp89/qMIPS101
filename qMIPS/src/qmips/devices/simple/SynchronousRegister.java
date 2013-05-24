@@ -22,6 +22,7 @@ public class SynchronousRegister extends Device {
 
 	Bus input, output, en, clk, rst;
 	Display disp;
+	LogicVector content;
 
 	public SynchronousRegister(Bus input, Bus output, Bus en, Bus rst, Bus clk) {
 		this.input = input;
@@ -29,6 +30,7 @@ public class SynchronousRegister extends Device {
 		this.en = en;
 		this.rst = rst;
 		this.clk = clk;
+		content = new LogicVector(output.size());
 		disp =  new SynchronousRegisterDisplay();
 		defineBehavior();
 	}
@@ -42,6 +44,7 @@ public class SynchronousRegister extends Device {
 			public void task() {
 				 if (clk.read().get(0)) {
 					if (en.read().get(0)) {
+						content = input.read();
 						disp.setContent(input.read());
 						output.write(input.read());
 					}
@@ -55,6 +58,7 @@ public class SynchronousRegister extends Device {
 			@Override
 			public void task() {
 				if (rst.read().get(0)) {
+					content = new LogicVector(output.size());
 					output.write(new LogicVector(output.size()));
 					disp.setContent(new LogicVector(output.size()));
 				}
@@ -62,6 +66,10 @@ public class SynchronousRegister extends Device {
 			
 		});
 
+	}
+	
+	public LogicVector getContent(){
+		return content;
 	}
 	
 	@Override

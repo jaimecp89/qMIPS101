@@ -7,6 +7,7 @@ import java.awt.Font;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
@@ -30,8 +31,11 @@ public class QuantumControlDisplay extends JPanel implements QuantumControl.Disp
 		add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
 		
+		JScrollPane scroll = new JScrollPane();
+		panel.add(scroll);
+		
 		stateText = new JTextArea();
-		panel.add(stateText);
+		scroll.setViewportView(stateText);
 		stateText.setEditable(false);
 		
 		JPanel panel_1 = new JPanel();

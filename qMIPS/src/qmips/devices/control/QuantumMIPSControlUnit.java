@@ -28,6 +28,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 	State current, next;
 	IControlUnitDisplay disp;
 	int trapNum = -1;
+	boolean isIf = false;
 
 	public QuantumMIPSControlUnit(Bus pcWriteCond, Bus pcWrite, Bus iOrD,
 			Bus memRead, Bus memWrite, Bus memToReg, Bus irWrite, Bus pcSource,
@@ -144,6 +145,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				qExe.write(0, 1);
 				target.write(0, 1);
 				disp.setState("IF", "Instruction fetch");
+				isIf = true;
 			}
 
 			@Override
@@ -165,6 +167,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				irWrite.write(0,1);
 				pcWrite.write(0,1);
 				disp.setState("ID", "Instruction decode");
+				isIf = false;
 			}
 
 			@Override
@@ -191,7 +194,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 					next = imm;
 					break;
 				case 0xC: //Q-Type
-				case 0xD: //Q-Meas
+				case 0xF: //Q-Meas
 					next = qt;
 					break;
 				case 0x1A: //TRAP
@@ -325,7 +328,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				aluSrcA.write(1, 1);
 				aluSrcB.write(2, 2);
 				aluOp.write(0, 1);
-				disp.setState("IMM", "Immediate execution");
+				disp.setState("IMM", "Immediate execution ADD");
 			}
 
 			@Override
@@ -490,7 +493,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				case 0xC:
 					next = ife;
 					break;
-				case 0xD:
+				case 0xF:
 					next = qmea;
 					break;
 				}
@@ -562,6 +565,11 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 	@Override
 	public void releaseTrap() {
 		trapNum = -1;
+	}
+
+	@Override
+	public boolean isIF() {
+		return isIf;
 	}
 
 }

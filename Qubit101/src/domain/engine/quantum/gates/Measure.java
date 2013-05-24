@@ -25,7 +25,7 @@ public class Measure implements Gate {
 				prob0 += Math.pow(e.getValue().getMagnitude().doubleValue(),
 						2.0);
 		}
-
+		
 		measurement = 0;
 		if (random > prob0)
 			measurement = 1;

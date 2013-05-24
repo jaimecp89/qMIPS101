@@ -113,4 +113,9 @@ public class MonocycleControlUnit extends Device implements ControlUnit{
 	@Override
 	public void releaseTrap() {}
 
+	@Override
+	public boolean isIF() {
+		return true;
+	}
+
 }

@@ -31,6 +31,7 @@ public class QuantumMIPS implements Builder{
 	private IMemory instrMemory;
 	private Bus rst;
 	private ControlUnit control;
+	private SynchronousRegister programCounter;
 	
 	@Override
 	public void build() {
@@ -112,7 +113,8 @@ public class QuantumMIPS implements Builder{
 		clockDev = new Clock(clk);
 		
 		//Program counter
-		displayable.put("Program counter", new SynchronousRegister(jmpAddr, instrPtr, solPCWrite, rst, clk));
+		programCounter = new SynchronousRegister(jmpAddr, instrPtr, solPCWrite, rst, clk);
+		displayable.put("Program counter", programCounter);
 		
 		//Instruction register
 		displayable.put("Instruction register", new SynchronousRegister(dataMem, instr, irWrite, rst, clk));
@@ -223,6 +225,12 @@ public class QuantumMIPS implements Builder{
 	@Override
 	public ControlUnit getControlUnit() {
 		return control;
+	}
+
+
+	@Override
+	public SynchronousRegister programCounter() {
+		return programCounter;
 	}
 
 }
