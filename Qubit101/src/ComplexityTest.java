@@ -43,12 +43,7 @@ public class ComplexityTest {
 			}
 		}
 		for(int i = 0; i < qubits; i++){
-			//System.out.println("Qubit: " + (i+1) + ", time: " + med[i] + " ms.");
-			System.out.println((i+1) + "\t" + med[i]);
-		}
-		System.out.println("\n////////////////////////\n");
-		for(int i = 0; i < qubits; i++){
-			System.out.println(medmem[i]);
+			System.out.println((i+1) + "\t" + med[i] + "\t" +medmem[i]);
 		}
 		
 	}
