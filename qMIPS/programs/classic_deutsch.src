@@ -1,6 +1,6 @@
 /*
+Classic version of the Deutsch's Algorithm.
 
-This is an example of the Deutsch's quantum algorithm.
 It takes one of the four possible one-bit binary 
 functions and finds out if it is constant:
 f(x) = 0 or f(x) = 1; or balanced: f(x) = x or 
@@ -10,24 +10,36 @@ The answer is stored in R1 as:
 R1 = 0  -> Constant
 R1 = 1  -> Balanced
 R1 = -1 -> Error
-
 */
 
-//Stored in the 0x200 address is the function to use
+// Stored in the 0x200 address is the function to use
 // 0: f(x) = 0; 1: f(x) = 1; 2: f(x) = x; 3: f(x) = not x;
 
-.word 0x200 0 //Change this number to select the function
+.word 0x200 1 //Change this number to select the function
 
 .text 0
 
 addi R2, R0, 0x200
 lw R2, 0(R2)         //Load the function number
 
-qrst R0              //Clean the quantum register
-qx Q1, Q1			 //Set the second qubit to 1
-qhad Q0, Q0			 //Apply the Hadamard gate to both qubits to 
-qhad Q1, Q1				//create the superposition.
+addi R6, R0, 0
 
+jal callf
+addi R4, R6, 0
+
+addi R6, R0, 1
+
+jal callf
+addi R5, R6, 0
+
+beq R4, R5, end
+addi R1, R0, 1
+
+end:
+trap 0
+
+//*****Oracle call*****
+callf:
 addi R3, R0, 0
 beq R3, R2, const0   //Function is f(x) = 0
 
@@ -44,24 +56,24 @@ addi R1, R0, -1      //There is no function with that number, return error
 trap 0
 
 continue:
-qhad Q0, Q0          //Apply the Hadamard gate to the first register so the components interfere
-qmea Q0, R1, 0		 //Measure the result to the R1 register and end
-trap 0
+jr R31
+//*********************
 
 const0:
+addi R6, R0, 0
 j continue
 
 const1:
-qx Q1, Q1
+addi R6, R0 , 1
 j continue
 
 ident:
-qx Q1, Q0
 j continue
 
 not:
-qx Q0, Q0
-qx Q1, Q0
-qx Q0, Q0
+addi R7, R0, 1
+xor R6, R6, R7
 j continue
+
+
 

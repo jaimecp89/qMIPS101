@@ -98,7 +98,7 @@ public class MainWindowController implements MainWindow.Controller {
 			}
 			clk.setCycleCount(0);
 			if(view.getProgramProgressView() != null)
-				view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
+				view.getProgramProgressView().setProgramCounter(-1);
 		}
 	}
 

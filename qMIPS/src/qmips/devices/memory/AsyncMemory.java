@@ -35,6 +35,10 @@ public class AsyncMemory extends Device implements IMemory{
 	
 	public void load(LogicVector v, int dir){
 		memContents[dir/4] = v;
+		int dir2 = addr.read().toInteger()/4;
+		if(dir/4 == dir2){
+			output.write(memContents[dir/4]);
+		}
 	}
 
 	@Override

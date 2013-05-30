@@ -57,7 +57,8 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 		this.rst = rst;
 		this.opcode = opcode;
 		this.machineNotify = new Bus(1);
-		disp = new ControlUnitDisplay();
+		disp = new SchematicQMIPSControlUnitDisplay();
+		this.current = ife;
 		defineStates();
 		defineBehavior();
 	}
@@ -72,6 +73,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				 if (clk.read().get(0)) {
 					if(next == null){
 						current = ife;
+						current.setOutput();
 					}else{
 						current = next;
 					}
@@ -274,7 +276,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				memToReg.write(1, 3);
 				
 				memRead.write(0, 1);
-				disp.setState("MCR", "Memory to register");
+				disp.setState("MRC", "Memory to register");
 			}
 
 			@Override
@@ -328,7 +330,7 @@ public class QuantumMIPSControlUnit extends Device implements ControlUnit {
 				aluSrcA.write(1, 1);
 				aluSrcB.write(2, 2);
 				aluOp.write(0, 1);
-				disp.setState("IMM", "Immediate execution ADD");
+				disp.setState("IMM", "Immediate execution");
 			}
 
 			@Override

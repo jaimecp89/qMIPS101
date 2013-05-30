@@ -40,7 +40,6 @@ public class ProgramProgressView extends JPanel{
 		
 		table = new JTable(sInst, headers);
 		table.setEnabled(false);
-		table.setRowSelectionInterval(0, 0);
 		scroll.setViewportView(table);
 		
 	}
@@ -54,6 +53,8 @@ public class ProgramProgressView extends JPanel{
 			int i = lineToPC.get(programCounter);
 			table.setRowSelectionInterval(i, i);
 			repaint();
+		}else{
+			table.getSelectionModel().removeSelectionInterval(table.getSelectedRow(), table.getSelectedRow());
 		}
 	}
 	
