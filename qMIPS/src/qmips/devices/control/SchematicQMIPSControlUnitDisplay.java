@@ -2,6 +2,7 @@ package qmips.devices.control;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -27,7 +28,6 @@ public class SchematicQMIPSControlUnitDisplay extends JPanel implements IControl
 		imgPanel = new ImageViewer();
 		imgPanel.setBackground(Color.WHITE);
 		add(imgPanel, BorderLayout.CENTER);
-		imgPanel.setSize(800, 600);
 		
 		ife = new ImageIcon(SchematicQMIPSControlUnitDisplay.class.getResource("/qmips/devices/control/qMIPSControlImgs/fase_if.png")).getImage();
 		id = new ImageIcon(SchematicQMIPSControlUnitDisplay.class.getResource("/qmips/devices/control/qMIPSControlImgs/fase_id.png")).getImage();
@@ -49,6 +49,7 @@ public class SchematicQMIPSControlUnitDisplay extends JPanel implements IControl
 		mfhi = new ImageIcon(SchematicQMIPSControlUnitDisplay.class.getResource("/qmips/devices/control/qMIPSControlImgs/fase_mfhi.png")).getImage();
 		
 		this.setSize(800, 600);
+		this.setPreferredSize(new Dimension(500, 300));
 	}
 
 	@Override

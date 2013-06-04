@@ -111,7 +111,10 @@ public class SourceCodeView extends JPanel {
 				}
 			}
 		});
-		scrollPane.setViewportView(editorPane);
+		JPanel wrapper = new JPanel();
+		wrapper.setLayout(new BorderLayout(0, 0));
+		wrapper.add(editorPane);
+		scrollPane.setViewportView(wrapper);
 		editorPane.setFont(new Font("Consolas", Font.PLAIN, 12));
 		originalText = "";
 		try {

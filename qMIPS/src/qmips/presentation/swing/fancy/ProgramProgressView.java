@@ -41,7 +41,6 @@ public class ProgramProgressView extends JPanel{
 		table = new JTable(sInst, headers);
 		table.setEnabled(false);
 		scroll.setViewportView(table);
-		
 	}
 
 	protected JTable getTable() {
