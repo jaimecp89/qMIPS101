@@ -168,7 +168,7 @@ immediate :
 		  opcode=immediateName t=iregister C s=iregister C imm=integer
 		  {
 		  	instrMem.load(new LogicVector((opcode << 26) + (s << 21) + (t << 16) + (imm & 0x0000FFFF), 32), pc); 
-		  	instructions.put(pc, new Instruction(name, new String[]{"R" + t, "R" + s, String.valueOf(imm)})); 
+		  	instructions.put(pc, new Instruction(name, new String[]{"R" + t, "R" + s, "0x" + Integer.toHexString(imm)})); 
 		  	pc = pc + 4;
 		  }
 		  ;		
@@ -185,7 +185,7 @@ load :
      opcode=loadName t=iregister C imm=integer OP s=iregister CP
 	   {
 	   	instrMem.load(new LogicVector((opcode << 26) + (s << 21) + (t << 16) + (imm & 0x0000FFFF), 32), pc); 
-	   	instructions.put(pc, new Instruction(name, new String[]{"R" + t, String.valueOf(imm) + "(R" + s + ")"})); 
+	   	instructions.put(pc, new Instruction(name, new String[]{"R" + t, "0x" + Integer.toHexString(imm) + "(R" + s + ")"})); 
 	   	pc = pc + 4;
 	   }
  	 ;
@@ -199,7 +199,7 @@ store :
       opcode=storeName imm=integer OP s=iregister CP C t=iregister
       {
       	instrMem.load(new LogicVector((opcode << 26) + (s << 21) + (t << 16) + (imm & 0x0000FFFF), 32), pc); 
-      	instructions.put(pc, new Instruction(name, new String[]{String.valueOf(imm) + "(R" + s + ")", "R" + t})); 
+      	instructions.put(pc, new Instruction(name, new String[]{"0x" + Integer.toHexString(imm) + "(R" + s + ")", "R" + t})); 
       	pc = pc+4;
       }
       ;
@@ -213,7 +213,7 @@ jump :
       opcode=jumpName addr=integer
       {
       	instrMem.load(new LogicVector((opcode << 26) + addr, 32), pc);
-      	instructions.put(pc, new Instruction(name, new String[]{String.valueOf(addr)})); 
+      	instructions.put(pc, new Instruction(name, new String[]{"0x" + Integer.toHexString(addr)})); 
       	pc = pc+4;
       }
      |
@@ -246,7 +246,7 @@ branch :
        opcode = branchName s = iregister C t = iregister  C addr = integer
        {
        	instrMem.load(new LogicVector((opcode << 26) + (s << 21) + (t << 16) + addr, 32), pc); 
-       	instructions.put(pc, new Instruction(name, new String[]{"R" + s, "R" + t, String.valueOf(addr)}));
+       	instructions.put(pc, new Instruction(name, new String[]{"R" + s, "R" + t, "0x" + Integer.toHexString(addr)}));
        	pc = pc+4;
        }
        |
@@ -294,7 +294,7 @@ quantum :
         QMEA target=qregister C reg = iregister C arg=integer
         {
         	instrMem.load(new LogicVector((0x0F << 26) + (arg << 21) + (target << 16) + (reg << 11) + 0x1A, 32), pc);
-        	instructions.put(pc, new Instruction("qmea", new String[]{"Q" + target, "R" + reg, String.valueOf(arg)})); 
+        	instructions.put(pc, new Instruction("qmea", new String[]{"Q" + target, "R" + reg, "0x" + Integer.toHexString(arg)})); 
         	pc = pc+4;
         }
         |
@@ -335,7 +335,7 @@ trap : {int imm;}
 	 TRAP imm = integer
 	 {
 	 	instrMem.load(new LogicVector((0x1A << 26) + imm, 32), pc);
-	 	instructions.put(pc, new Instruction("trap", new String[]{String.valueOf(imm)})); 
+	 	instructions.put(pc, new Instruction("trap", new String[]{"0x" + Integer.toHexString(imm)})); 
 	 	pc = pc+4;
 	 }
 	 ;

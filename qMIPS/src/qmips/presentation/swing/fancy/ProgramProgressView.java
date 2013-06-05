@@ -26,7 +26,7 @@ public class ProgramProgressView extends JPanel{
 		String[][] sInst = new String[instructions.size()][6];
 		int i = 0;
 		for(Entry<Integer, Instruction> e : instructions.entrySet()){
-			sInst[i][0] = new Integer(e.getKey()).toString() + (e.getValue().getLabel() != null? ": " + e.getValue().getLabel() : "") ;
+			sInst[i][0] = "0x" + Integer.toHexString(e.getKey()) + (e.getValue().getLabel() != null? ": " + e.getValue().getLabel() : "") ;
 			sInst[i][1] = e.getValue().getOperation();
 			for(int x = 0; x < e.getValue().getParameters().length; x++){
 				sInst[i][x+2] = e.getValue().getParameters()[x];
