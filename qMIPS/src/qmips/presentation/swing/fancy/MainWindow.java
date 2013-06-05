@@ -105,7 +105,7 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				File f;
 				if ((f = askForFile()) != null){
-					CompilationResults res = controller.loadSource(f, 0);
+					CompilationResults res = controller.buildAndLoadSource(f, 0);
 					if(res != null){
 						createInternalSourceFrames(f, res.getInstructions());
 					}
