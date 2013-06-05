@@ -46,8 +46,6 @@ public class MainWindowController implements MainWindow.Controller {
 				public void run() {
 					if (control.checkTrap() == -1 && !Thread.interrupted()) {
 						clk.runCycles(1);
-						if(control.isIF())
-							view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
 					} else
 						Log.inf.println("Program terminated with code: "
 								+ control.checkTrap());
@@ -56,6 +54,8 @@ public class MainWindowController implements MainWindow.Controller {
 			});
 			simulationThread.start();
 			view.displayModalInfo("Simulating...", true);
+			if(control.isIF())
+				view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
 		}
 	}
 
@@ -69,8 +69,6 @@ public class MainWindowController implements MainWindow.Controller {
 					int num = c;
 					while (control.checkTrap() == -1 && num > 0 && !Thread.interrupted()) {
 						clk.runCycles(1);
-						if(control.isIF())
-							view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
 						num--;
 					}
 					if (control.checkTrap() != -1)
@@ -81,6 +79,8 @@ public class MainWindowController implements MainWindow.Controller {
 			});
 			simulationThread.start();
 			view.displayModalInfo("Simulating...", true);
+			if(control.isIF())
+				view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
 		}
 
 	}
@@ -180,8 +180,6 @@ public class MainWindowController implements MainWindow.Controller {
 				public void run() {
 					while (control.checkTrap() == -1 && !Thread.interrupted()) {
 						clk.runCycles(1);
-						if(control.isIF())
-							view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
 					}
 					Log.inf.println("Program terminated with code: "
 							+ control.checkTrap());
@@ -190,6 +188,8 @@ public class MainWindowController implements MainWindow.Controller {
 			});
 			simulationThread.start();
 			view.displayModalInfo("Simulating...", true);
+			if(control.isIF())
+				view.getProgramProgressView().setProgramCounter(builder.programCounter().getContent().toInteger());
 		}
 	}
 

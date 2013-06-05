@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 import qmips.devices.Device;
 import qmips.others.Behavior;
 import qmips.others.Bus;
-import qmips.others.LogicVector;
 
 /**
  * 
