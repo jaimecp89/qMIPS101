@@ -1,10 +1,12 @@
 package qmips.devices.clock;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import qmips.others.Bus;
@@ -134,19 +136,20 @@ public class Clock implements Runnable {
 	 * @author Jaime Coello de Portugal
 	 * 
 	 */
-	class ClockFrame extends JInternalFrame {
+	class ClockFrame extends JPanel {
 		public ClockFrame() {
 
+			setLayout(new BorderLayout());
 			JLabel lblNewLabel = new JLabel("Cycle number");
 			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			getContentPane().add(lblNewLabel, BorderLayout.NORTH);
+			add(lblNewLabel, BorderLayout.NORTH);
 
 			cycleNumberLabel = new JLabel("0");
 			cycleNumberLabel.setFont(new Font("Tahoma", Font.PLAIN, 22));
 			cycleNumberLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			getContentPane().add(cycleNumberLabel, BorderLayout.CENTER);
+			add(cycleNumberLabel, BorderLayout.CENTER);
 			setVisible(true);
-			setSize(150, 100);
+			setPreferredSize(new Dimension(150, 100));
 		}
 
 		private static final long serialVersionUID = 9048677220479688042L;
@@ -157,7 +160,7 @@ public class Clock implements Runnable {
 		}
 	}
 
-	public JInternalFrame getDisplay() {
+	public JPanel getDisplay() {
 		return disp;
 	}
 

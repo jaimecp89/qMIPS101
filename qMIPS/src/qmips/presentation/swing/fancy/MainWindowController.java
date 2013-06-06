@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
@@ -115,6 +116,7 @@ public class MainWindowController implements MainWindow.Controller {
 		for(Entry<String, Device> e: builder.getDisplayableDevices().entrySet()){
 			views.put(e.getKey(), e.getValue().display());
 		}
+		views.put("Cycle count", clk.getDisplay());
 		view.displayDevicesViews(views);
 		this.clockThread = builder.getClock().startRunning();
 		systemBuilt = true;
@@ -220,6 +222,10 @@ public class MainWindowController implements MainWindow.Controller {
 			control.releaseTrap();
 			Log.inf.println("Trap reseted.");
 		}
+	}
+	
+	public JPanel getClockView(){
+		return clk.getDisplay();
 	}
 
 }

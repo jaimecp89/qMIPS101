@@ -94,7 +94,7 @@ public class MainView extends JFrame {
 					rst = builder.getResetBus();
 					control = builder.getControlUnit();
 					displayDevices();
-					frameMap.put("Clock", clk.getDisplay());
+					//frameMap.put("Clock", clk.getDisplay());
 					getMainPane().add(clk.getDisplay());
 					clk.startRunning();
 					File f = fileChooser.getSelectedFile();
