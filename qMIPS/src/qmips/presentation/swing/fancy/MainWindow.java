@@ -2,6 +2,7 @@ package qmips.presentation.swing.fancy;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -65,6 +66,8 @@ public class MainWindow extends JFrame {
 		this.controller = contr;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/qmips/icons/qMIPSIcon.png")));
+		setTitle("qMIPS Simulator");
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentMoved(ComponentEvent arg0) {
