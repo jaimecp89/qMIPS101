@@ -9,7 +9,7 @@ the address 0x600 from among the numbers from 0 to 31 (5 qubits).
 
 */
 
-.word 0x600 5        //This is the index the algorithm will try to find.
+.word 0x600 7        //This is the index the algorithm will try to find.
 
 .text 0
 
@@ -144,7 +144,7 @@ add R7, R0, R0
 setcontrol:
 qcnt R7
 addi R7, R7, 1
-bne R7, R5, setcontrol
+bne R7, R8, setcontrol
 
 qx Q5, Q5
 
@@ -153,7 +153,7 @@ add R7, R0, R0
 unsetcontrol:
 qcnt R7
 addi R7, R7, 1
-bne R7, R5, unsetcontrol
+bne R7, R8, unsetcontrol
 
 add R7, R0, R0
 
