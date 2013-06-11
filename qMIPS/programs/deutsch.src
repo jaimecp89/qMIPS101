@@ -16,7 +16,7 @@ R1 = -1 -> Error
 //Stored in the 0x200 address is the function to use
 // 0: f(x) = 0; 1: f(x) = 1; 2: f(x) = x; 3: f(x) = not x;
 
-.word 0x200 0 //Change this number to select the function
+.word 0x200 3 //Change this number to select the function
 
 .text 0
 

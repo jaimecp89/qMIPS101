@@ -18,8 +18,10 @@ lw R21, 0(R21) //Load number 'N' from memory
 //Main algorithm
 
 main:
-jal rnd15               //Random number 'a' to R22
+jal rnd31               //Random number 'a' to R22
 beq R0, R22, main       //If random number is 0 try again
+slt R1, R22, R21
+bne R0, R1, main        //If random number > 'N' try again
 div R23, R21, R22
 mfhi R24                //Find if 'a' is a factor of 'N'
 beq R0, R24, aIsFactor  //If 'a' is a factor of 'N' we are done
@@ -35,15 +37,16 @@ trap 0
 
 //end main
 
-//Subroutine that generates a random number from 0 to 15 and stores it in R22
+//Subroutine that generates a random number from 0 to 31 and stores it in R22
 
-rnd15:
+rnd31:
 xor R22, R22, R22      //Clean R22
 qrst R22               //Quatum register to ground state
 qhad Q0, Q0            //Generate superposition
 qhad Q1, Q1
 qhad Q2, Q2
 qhad Q3, Q3
+qhad Q4, Q4
 qmea Q0, R22, 0        //Measure each qubit into R22
 qmea Q1, R23, 1
 or R22, R23, R22
@@ -51,6 +54,10 @@ qmea Q2, R23, 2
 or R22, R23, R22
 qmea Q3, R23, 3
 or R22, R23, R22
+qmea Q4, R23, 4
+or R22, R23, R22
+
+qrst R0
 jr R31                 //Return to main program
 
 //end rnd15
@@ -72,18 +79,18 @@ qhad Q6, Q6
 qhad Q7, Q7
 
 xor R10, R10, R10  //Clean R10 to use it as iteration counter
-addi R11, R0, 7    //We need to run 8 (0 - 7) iterations of the algorithm
+addi R11, R0, 10    //We need to run 10 iterations of the algorithm
 
 loop:
 sw 0(R29), R31     //Push return address
 addi R29, R29, 4   //Increase stack pointer
 
 qcnt R10           //Set the control qubit for this iteration
-jal modexp         //Call the modular exponentiation algorithm
+jal modex         //Call the modular exponentiation algorithm
 qcnt R10           //Unset the control qubit
 
-lw R31, 0(29)      //Pull the return address
-subi R29, R29, 4   //Decrease the stack pointer
+lw R31, 0(R29)      //Pull the return address
+addi R29, R29, -4   //Decrease the stack pointer
 
 bne R10, R11, loop //Another iteration if not ended
 
@@ -95,8 +102,340 @@ jr R31
 //Modular exponentiation quantum function
 
 modex:
+addi R20, R0, 10
+addi R21, R0, 15
+addi R22, R0, 20
+addi R23, R0, 25
+addi R24, R0, 10
+
+addi R25, R0, 0
+addi R26, R0, 2
+sll R26, R26, R10
+
+sw 0(R29), R31     //Push return address
+addi R29, R29, 4   //Increase stack pointer
+
+modexcont:
+jal modadd         //Call the modular exponentiation algorithm
+addi R25, R25, 1
+bne R25, R26, modexcont
+
+lw R31, 0(R29)      //Pull the return address
+addi R29, R29, -4   //Decrease the stack pointer
 
 jr R31
 //end modex
+
+//*******************************************//
+
+/*
+Drapper modular addition subroutine
+Adds two 5 qubit quantum registers, one pointed by R20 and another pointed by R21
+modulo the one pointed by R22.
+We need an ancillary qubit pointed by R23 and the current offset stored in R24.
+The result substitutes the second register.
+*/
+
+modadd:
+
+add R16, R20, R0
+add R17, R21, R0
+add R18, R22, R0     //Store pointers in safer registers
+
+addi R20, R17, 0     //QFT on 'b'
+jal qft5
+
+addi R20, R17, -5
+addi R16, R20, 0     //Swap (b-5) and 'a' states
+jal swap
+
+addi R20, R17, -5    //Drapper ADD operator over 'a' and 'b'
+jal add5
+
+addi R20, R17, -5
+addi R16, R20, 0     //Put 'a' back in its place
+jal swap
+
+addi R20, R17, -5
+addi R18, R22, 0     //Swap (b-5) and 'N' states
+jal swap
+
+addi R20, R17, -5    //Drapper ADD operator over 'N' and 'b'
+jal invadd5
+
+addi R20, R17, 0     //INVQFT on 'b'
+jal invqft5
+
+addi R20, R17, 4
+qcnt R20
+qoff R23
+qx Q0, Q0
+qoff R24
+qcnt R20             //The last qubit of 'b' controls not aux
+
+addi R20, R17, 0     //QFT on 'b'
+jal qft5
+
+qcnt R23
+addi R20, R17, -5    //Drapper ADD operator over 'N' and 'b' controlled by aux
+jal add5
+
+addi R20, R17, -5
+addi R18, R22, 0     //Put 'N' back in its place
+jal swap
+
+addi R20, R17, -5
+addi R16, R20, 0     //Swap (b-5) and 'a' states
+jal swap
+
+addi R20, R17, -5    //Drapper ADD operator over 'a' and 'b'
+jal invadd5
+
+addi R20, R17, 0     //INVQFT on 'b'
+jal invqft5
+
+addi R20, R17, 4
+qcnt R20
+qoff R20
+qx Q0,Q0
+qoff R23
+qx Q0, Q0
+qcnt R20 
+qoff R20
+qx Q0, Q0
+qoff R24             //The last qubit of 'b' negated controls not aux
+
+addi R20, R17, 0     //QFT on 'b'
+jal qft5
+
+addi R20, R17, -5    //Drapper ADD operator over 'a' and 'b'
+jal add5
+
+addi R20, R17, -5
+addi R16, R20, 0     //Swap (b-5) and 'a' states
+jal swap
+
+addi R20, R17, 0     //INVQFT on 'b'
+jal invqft5
+
+jr R31
+
+//*******************************************//
+
+/*
+Drapper addition subroutine.
+Adds two 5 qubit quantum registers, starting with the qubit pointed by R20.
+The second register must be in the QFT space and returns it in the same 
+space.
+The result substitutes the second register.
+*/
+
+add5:
+qoff R20
+
+addi R21, R0, 1
+qphs Q5, Q0, R21
+addi R21, R0, 2
+qphs Q5, Q1, R21
+addi R21, R0, 3
+qphs Q5, Q2, R21
+addi R21, R0, 4
+qphs Q5, Q3, R21
+addi R21, R0, 5
+qphs Q5, Q4, R21
+
+addi R21, R0, 1
+qphs Q6, Q1, R21
+addi R21, R0, 2
+qphs Q6, Q2, R21
+addi R21, R0, 3
+qphs Q6, Q3, R21
+addi R21, R0, 4
+qphs Q6, Q4, R21
+
+addi R21, R0, 1
+qphs Q7, Q2, R21
+addi R21, R0, 2
+qphs Q7, Q3, R21
+addi R21, R0, 3
+qphs Q7, Q4, R21
+
+addi R21, R0, 1
+qphs Q8, Q3, R21
+addi R21, R0, 2
+qphs Q8, Q4, R21
+
+addi R21, R0, 1
+qphs Q9, Q4, R21
+
+jr R31
+
+//*******************************************//
+//Inverse Drapper addition starting with the qubit pointed by R20.
+
+invadd5:
+qoff R20
+
+addi R21, R0, 1
+qphs Q9, Q4, R21
+
+addi R21, R0, 2
+qphs Q8, Q4, R21
+addi R21, R0, 1
+qphs Q8, Q3, R21
+
+addi R21, R0, 3
+qphs Q7, Q4, R21
+addi R21, R0, 2
+qphs Q7, Q3, R21
+addi R21, R0, 1
+qphs Q7, Q2, R21
+
+addi R21, R0, 4
+qphs Q6, Q4, R21
+addi R21, R0, 3
+qphs Q6, Q3, R21
+addi R21, R0, 2
+qphs Q6, Q2, R21
+addi R21, R0, 1
+qphs Q6, Q1, R21
+
+addi R21, R0, 5
+qphs Q5, Q4, R21
+addi R21, R0, 4
+qphs Q5, Q3, R21
+addi R21, R0, 3
+qphs Q5, Q2, R21
+addi R21, R0, 2
+qphs Q5, Q1, R21
+addi R21, R0, 1
+qphs Q5, Q0, R21
+
+
+//*******************************************//
+
+//Quantum Fourier Transform for the 5 qubits register pointed by R20
+
+qft5:
+qoff R20
+
+qhad Q0, Q0
+
+addi R22, R0, 2
+qphs Q0, Q1, R22
+addi R22, R0, 3
+qphs Q0, Q2, R22
+addi R22, R0, 4
+qphs Q0, Q3, R22
+addi R22, R0, 5
+qphs Q0, Q4, R22
+
+qhad Q1, Q1
+
+addi R22, R0, 2
+qphs Q1, Q2, R22
+addi R22, R0, 3
+qphs Q1, Q3, R22
+addi R22, R0, 4
+qphs Q1, Q4, R22
+
+qhad Q2, Q2
+
+addi R22, R0, 2
+qphs Q2, Q3, R22
+addi R22, R0, 3
+qphs Q2, Q4, R22
+
+qhad Q3, Q3
+
+addi R22, R0, 2
+qphs Q3, Q4, R22
+
+qhad Q4, Q4
+
+jr R31
+
+//*******************************************//
+
+//Inverse Quantum Fourier Transform for the 5 qubits register pointed by R20
+
+invqft5:
+qoff R20
+
+qhad Q4, Q4
+
+addi R22, R0, 2
+qphs Q3, Q4, R22
+
+qhad Q3, Q3
+
+addi R22, R0, 3
+qphs Q2, Q4, R22
+addi R22, R0, 2
+qphs Q2, Q3, R22
+
+qhad Q2, Q2
+
+addi R22, R0, 4
+qphs Q1, Q4, R22
+addi R22, R0, 3
+qphs Q1, Q3, R22
+addi R22, R0, 2
+qphs Q1, Q2, R22
+
+qhad Q1, Q1
+
+addi R22, R0, 5
+qphs Q0, Q4, R22
+addi R22, R0, 4
+qphs Q0, Q3, R22
+addi R22, R0, 3
+qphs Q0, Q2, R22
+addi R22, R0, 2
+qphs Q0, Q1, R22
+
+qhad Q0, Q0
+
+jr R31
+
+//*******************************************//
+
+/*
+Swap subroutine. Swaps the state of the 5 qubit register
+pointed by R20 with the one pointed by R21.
+*/
+
+swap:
+
+addi R22, R0, 4
+addi R23, R0, 0
+
+swapcont:
+
+qoff R20
+qcnt R20
+qoff R21
+qx Q0, Q0
+qcnt R20
+
+qoff R21
+qcnt R21
+qoff R20
+qx Q0, Q0
+qcnt R21
+
+qoff R20
+qcnt R20
+qoff R21
+qx Q0, Q0
+qcnt R20
+
+addi R20, R20, 1
+addi R21, R21, 1
+addi R23, R23, 1
+
+bne R23, R22, swapcont
+
+jr R31
 
 //*******************************************//

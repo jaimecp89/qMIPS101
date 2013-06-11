@@ -27,7 +27,7 @@ qhad Q4, Q4
 qx Q5, Q5            //Set the input for the oracle subspace
 qhad Q5, Q5          //Apply the Hadamard gate to it to change the phase of the answer
 
-addi R2, R0, 4       //The algorithm needs 3 (= ceiling(sqrt(8))) iterations
+addi R2, R0, 5       //The algorithm needs 5 (= ceiling((Pi/4) * sqrt(32))) iterations
 					    //of the Grover cycle to find the solution.
 grover:
 
