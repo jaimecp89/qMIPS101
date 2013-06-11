@@ -1,0 +1,196 @@
+<qcircuit name="QFTDrapperADD.qcml" size="4">
+	<stage size="10">
+		<qcircuit name="QFT5.qcml" qubit="5" size="15">
+			<stage size="5">
+				<gate gate_id="1" qubit="0"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="0"/>
+				<control qubit="1"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="0"/>
+				<control qubit="2"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="0"/>
+				<control qubit="3"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*5" controlled="true" gate_id="6" qubit="0"/>
+				<control qubit="4"/>
+			</stage>
+			<stage size="5">
+				<gate gate_id="1" qubit="1"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="1"/>
+				<control qubit="2"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="1"/>
+				<control qubit="3"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="1"/>
+				<control qubit="4"/>
+			</stage>
+			<stage size="5">
+				<gate gate_id="1" qubit="2"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="2"/>
+				<control qubit="3"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="2"/>
+				<control qubit="4"/>
+			</stage>
+			<stage size="5">
+				<gate gate_id="1" qubit="3"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="3"/>
+				<control qubit="4"/>
+			</stage>
+			<stage size="5">
+				<gate gate_id="1" qubit="4"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="10">
+		<qcircuit name="DrapperADD.qcml" qubit="0" size="15">
+			<stage size="10">
+				<control qubit="0"/>
+				<gate alpha="2*pi/2*1" controlled="true" gate_id="6" qubit="5"/>
+			</stage>
+			<stage size="10">
+				<control qubit="1"/>
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="5"/>
+			</stage>
+			<stage size="10">
+				<control qubit="2"/>
+				<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="5"/>
+			</stage>
+			<stage size="10">
+				<control qubit="3"/>
+				<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="5"/>
+			</stage>
+			<stage size="10">
+				<control qubit="4"/>
+				<gate alpha="2*pi/2*5" controlled="true" gate_id="6" qubit="5"/>
+			</stage>
+			<stage size="10">
+				<control qubit="1"/>
+				<gate alpha="2*pi/2*1" controlled="true" gate_id="6" qubit="6"/>
+			</stage>
+			<stage size="10">
+				<control qubit="2"/>
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="6"/>
+			</stage>
+			<stage size="10">
+				<control qubit="3"/>
+				<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="6"/>
+			</stage>
+			<stage size="10">
+				<control qubit="4"/>
+				<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="6"/>
+			</stage>
+			<stage size="10">
+				<control qubit="2"/>
+				<gate alpha="2*pi/2*1" controlled="true" gate_id="6" qubit="7"/>
+			</stage>
+			<stage size="10">
+				<control qubit="3"/>
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="7"/>
+			</stage>
+			<stage size="10">
+				<control qubit="4"/>
+				<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="7"/>
+			</stage>
+			<stage size="10">
+				<control qubit="3"/>
+				<gate alpha="2*pi/2*1" controlled="true" gate_id="6" qubit="8"/>
+			</stage>
+			<stage size="10">
+				<control qubit="4"/>
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="8"/>
+			</stage>
+			<stage size="10">
+				<control qubit="4"/>
+				<gate alpha="2*pi/2*1" controlled="true" gate_id="6" qubit="9"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="10">
+		<qcircuit name="InvQFT5.qcml" qubit="5" size="15">
+			<stage size="5">
+				<gate gate_id="1" qubit="4"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="3"/>
+				<control qubit="4"/>
+			</stage>
+			<stage size="5">
+				<gate gate_id="1" qubit="3"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="2"/>
+				<control qubit="4"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="2"/>
+				<control qubit="3"/>
+			</stage>
+			<stage size="5">
+				<gate gate_id="1" qubit="2"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="1"/>
+				<control qubit="4"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="1"/>
+				<control qubit="3"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="1"/>
+				<control qubit="2"/>
+			</stage>
+			<stage size="5">
+				<gate gate_id="1" qubit="1"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*5" controlled="true" gate_id="6" qubit="0"/>
+				<control qubit="4"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="0"/>
+				<control qubit="3"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="0"/>
+				<control qubit="2"/>
+			</stage>
+			<stage size="5">
+				<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="0"/>
+				<control qubit="1"/>
+			</stage>
+			<stage size="5">
+				<gate gate_id="1" qubit="0"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="10">
+		<gate gate_id="-3" qubit="0"/>
+		<gate gate_id="-3" qubit="1"/>
+		<gate gate_id="-3" qubit="2"/>
+		<gate gate_id="-3" qubit="3"/>
+		<gate gate_id="-3" qubit="4"/>
+		<gate gate_id="-3" qubit="5"/>
+		<gate gate_id="-3" qubit="6"/>
+		<gate gate_id="-3" qubit="7"/>
+		<gate gate_id="-3" qubit="8"/>
+		<gate gate_id="-3" qubit="9"/>
+	</stage>
+</qcircuit>

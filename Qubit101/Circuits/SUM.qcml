@@ -1,0 +1,10 @@
+<qcircuit name="SUM" size="2">
+	<stage size="3">
+		<control qubit="0"/>
+		<gate controlled="true" gate_id="3" qubit="2"/>
+	</stage>
+	<stage size="3">
+		<control qubit="1"/>
+		<gate controlled="true" gate_id="3" qubit="2"/>
+	</stage>
+</qcircuit>

@@ -1,0 +1,244 @@
+<qcircuit name="ADD5" size="17">
+	<stage size="16">
+		<gate gate_id="-1" qubit="0"/>
+		<gate gate_id="-1" qubit="3"/>
+		<gate gate_id="-1" qubit="6"/>
+		<gate gate_id="-1" qubit="9"/>
+		<gate gate_id="-1" qubit="12"/>
+		<gate gate_id="-1" qubit="15"/>
+	</stage>
+	<stage size="16">
+		<qcircuit name="CARRY" qubit="0" size="3">
+			<stage size="4">
+				<control qubit="1"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="4">
+				<control qubit="0"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="CARRY" qubit="3" size="3">
+			<stage size="4">
+				<control qubit="1"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="4">
+				<control qubit="0"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="CARRY" qubit="6" size="3">
+			<stage size="4">
+				<control qubit="1"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="4">
+				<control qubit="0"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="CARRY" qubit="9" size="3">
+			<stage size="4">
+				<control qubit="1"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="4">
+				<control qubit="0"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="CARRY" qubit="12" size="3">
+			<stage size="4">
+				<control qubit="1"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="4">
+				<control qubit="0"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<control qubit="14"/>
+		<gate controlled="true" gate_id="3" qubit="15"/>
+	</stage>
+	<stage size="16">
+		<qcircuit name="SUM" qubit="13" size="2">
+			<stage size="3">
+				<control qubit="0"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="3">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="CARRY-1" qubit="9" size="3">
+			<stage size="4">
+				<control qubit="0"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="SUM" qubit="9" size="2">
+			<stage size="3">
+				<control qubit="0"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="3">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="CARRY-1" qubit="6" size="3">
+			<stage size="4">
+				<control qubit="0"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="SUM" qubit="6" size="2">
+			<stage size="3">
+				<control qubit="0"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="3">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="CARRY-1" qubit="3" size="3">
+			<stage size="4">
+				<control qubit="0"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="SUM" qubit="3" size="2">
+			<stage size="3">
+				<control qubit="0"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="3">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="CARRY-1" qubit="0" size="3">
+			<stage size="4">
+				<control qubit="0"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="4">
+				<control qubit="1"/>
+				<control qubit="2"/>
+				<gate controlled="true" gate_id="3" qubit="3"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<qcircuit name="SUM" qubit="0" size="2">
+			<stage size="3">
+				<control qubit="0"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+			<stage size="3">
+				<control qubit="1"/>
+				<gate controlled="true" gate_id="3" qubit="2"/>
+			</stage>
+		</qcircuit>
+	</stage>
+	<stage size="16">
+		<gate gate_id="-2" qubit="0"/>
+		<gate gate_id="-2" qubit="3"/>
+		<gate gate_id="-2" qubit="6"/>
+		<gate gate_id="-2" qubit="9"/>
+		<gate gate_id="-2" qubit="12"/>
+		<gate gate_id="-2" qubit="15"/>
+	</stage>
+</qcircuit>

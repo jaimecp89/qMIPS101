@@ -1,0 +1,38 @@
+<qcircuit name="QFT4" size="10">
+	<stage size="4">
+		<gate gate_id="1" qubit="0"/>
+	</stage>
+	<stage size="4">
+		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="0"/>
+		<control qubit="1"/>
+	</stage>
+	<stage size="4">
+		<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="0"/>
+		<control qubit="2"/>
+	</stage>
+	<stage size="4">
+		<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="0"/>
+		<control qubit="3"/>
+	</stage>
+	<stage size="4">
+		<gate gate_id="1" qubit="1"/>
+	</stage>
+	<stage size="4">
+		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="1"/>
+		<control qubit="2"/>
+	</stage>
+	<stage size="4">
+		<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="1"/>
+		<control qubit="3"/>
+	</stage>
+	<stage size="4">
+		<gate gate_id="1" qubit="2"/>
+	</stage>
+	<stage size="4">
+		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="2"/>
+		<control qubit="3"/>
+	</stage>
+	<stage size="4">
+		<gate gate_id="1" qubit="3"/>
+	</stage>
+</qcircuit>

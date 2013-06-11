@@ -1,0 +1,16 @@
+<qcircuit name="CARRY" size="3">
+	<stage size="4">
+		<control qubit="1"/>
+		<control qubit="2"/>
+		<gate controlled="true" gate_id="3" qubit="3"/>
+	</stage>
+	<stage size="4">
+		<control qubit="1"/>
+		<gate controlled="true" gate_id="3" qubit="2"/>
+	</stage>
+	<stage size="4">
+		<control qubit="0"/>
+		<control qubit="2"/>
+		<gate controlled="true" gate_id="3" qubit="3"/>
+	</stage>
+</qcircuit>
