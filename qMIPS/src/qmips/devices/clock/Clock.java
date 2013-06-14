@@ -3,6 +3,7 @@ package qmips.devices.clock;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -52,6 +53,9 @@ public class Clock implements Runnable {
 	public void setCycleCount(int cycleCount) {
 		this.cycleCount = cycleCount;
 		disp.cycleNumberLabel.setText(cycleCount + "");
+		disp.setMHzTime(cycleCount);
+		if(cycleCount == 0)
+			disp.setTime(0);
 	}
 
 	/**
@@ -70,6 +74,7 @@ public class Clock implements Runnable {
 			semicycle--;
 			cycleCount++;
 			disp.getCycleNumberLabel().setText(cycleCount + "");
+			disp.setMHzTime(cycleCount);
 		}
 	}
 
@@ -91,9 +96,11 @@ public class Clock implements Runnable {
 				while (remainingCycles == 0) {
 					wait();
 				}
+				long tm = System.currentTimeMillis();
 				refreshOutput();
 				SyncShortcut.sync.taskEnded();
 				SyncShortcut.sync.clockLockWait();
+				disp.setTime(disp.getTime() + System.currentTimeMillis() - tm);
 				remainingCycles--;
 			} catch (InterruptedException e) {
 				remainingCycles = 0;
@@ -139,24 +146,70 @@ public class Clock implements Runnable {
 	class ClockFrame extends JPanel {
 		public ClockFrame() {
 
-			setLayout(new BorderLayout());
+			setLayout(new GridLayout(3, 1));
+			JPanel panelUp = new JPanel(new BorderLayout());
+			JPanel panelCenter = new JPanel(new BorderLayout());
+			JPanel panelDown = new JPanel(new BorderLayout());
+			add(panelUp);
+			add(panelCenter);
+			add(panelDown);
+			
 			JLabel lblNewLabel = new JLabel("Cycle number");
 			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			add(lblNewLabel, BorderLayout.NORTH);
+			panelUp.add(lblNewLabel, BorderLayout.NORTH);
 
 			cycleNumberLabel = new JLabel("0");
 			cycleNumberLabel.setFont(new Font("Tahoma", Font.PLAIN, 22));
 			cycleNumberLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			add(cycleNumberLabel, BorderLayout.CENTER);
+			panelUp.add(cycleNumberLabel, BorderLayout.CENTER);
+			
+			JLabel lblNewLabel2 = new JLabel("Time at 25MHz");
+			lblNewLabel2.setHorizontalAlignment(SwingConstants.CENTER);
+			panelCenter.add(lblNewLabel2, BorderLayout.NORTH);
+			
+			timeMhzLabel = new JLabel("0");
+			timeMhzLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			timeMhzLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			panelCenter.add(timeMhzLabel, BorderLayout.CENTER);
+			
+			JLabel lblTime = new JLabel("Simulation time");
+			lblTime.setHorizontalAlignment(SwingConstants.CENTER);
+			panelDown.add(lblTime, BorderLayout.NORTH);
+			
+			timeLabel = new JLabel("0");
+			timeLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			panelDown.add(timeLabel, BorderLayout.CENTER);
+			
 			setVisible(true);
-			setPreferredSize(new Dimension(150, 100));
+			setPreferredSize(new Dimension(150, 200));
 		}
 
 		private static final long serialVersionUID = 9048677220479688042L;
 		private JLabel cycleNumberLabel;
+		private JLabel timeLabel;
+		private JLabel timeMhzLabel;
+		private long time;
 
 		public JLabel getCycleNumberLabel() {
 			return cycleNumberLabel;
+		}
+		
+		public JLabel getTimeLabel() {
+			return timeLabel;
+		}
+		
+		public long getTime(){
+			return time;
+		}
+		
+		public void setTime(long time){
+			this.time = time;
+			timeLabel.setText(String.valueOf(time) + " ms");
+		}
+		
+		public void setMHzTime(int cycleCount){
+			timeMhzLabel.setText(cycleCount / 25 + " us");
 		}
 	}
 

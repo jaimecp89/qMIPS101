@@ -66,7 +66,7 @@ public class QuantumControl extends Device{
 						int[] control;
 						Vector<Integer> v = new Vector<Integer>();
 						for(Integer i : controlQubits){
-							if(i != qarray.getSelectedTarget())
+							if(i != ((qarray.getSelectedTarget() + offset) % 32))
 								v.add(i);
 						}
 						if(qarray.getSelectedControl() != -1)

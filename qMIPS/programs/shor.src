@@ -4,19 +4,17 @@ It takes a number from 0 to 15 stored in the 0x500 address and
 tries to find one of its prime factors, storing it in R1.
 */
 
-.word 0x500 21
+.word 0x500 15
 .text 0
 
 //Init stack pointer
 addi R29, R0, 0x600
 
 //Load the data from memory address 0x500
-
 addi R21, R21, 0x500
 lw R21, 0(R21) //Load number 'N' from memory
 
 //Main algorithm
-
 main:
 jal rnd31               //Random number 'a' to R22
 beq R0, R22, main       //If random number is 0 try again
@@ -78,21 +76,22 @@ qhad Q5, Q5
 qhad Q6, Q6
 qhad Q7, Q7
 
-xor R10, R10, R10  //Clean R10 to use it as iteration counter
-addi R11, R0, 10    //We need to run 10 iterations of the algorithm
+xor R10, R10, R10   //Clean R10 to use it as iteration counter
+addi R11, R0, 8     //We need to run 8 iterations of the algorithm
 
 loop:
-sw 0(R29), R31     //Push return address
-addi R29, R29, 4   //Increase stack pointer
+sw 0(R29), R31      //Push return address
+addi R29, R29, 4    //Increase stack pointer
 
-qcnt R10           //Set the control qubit for this iteration
-jal modex         //Call the modular exponentiation algorithm
-qcnt R10           //Unset the control qubit
+qcnt R10            //Set the control qubit for this iteration
+jal modex           //Call the modular exponentiation algorithm
+qcnt R10            //Unset the control qubit
 
-lw R31, 0(R29)      //Pull the return address
 addi R29, R29, -4   //Decrease the stack pointer
+lw R31, 0(R29)      //Pull the return address
 
-bne R10, R11, loop //Another iteration if not ended
+addi R10, R10, 1
+bne R10, R11, loop  //Another iteration if not ended
 
 jr R31
 //end quantum
@@ -120,8 +119,8 @@ jal modadd         //Call the modular exponentiation algorithm
 addi R25, R25, 1
 bne R25, R26, modexcont
 
-lw R31, 0(R29)      //Pull the return address
 addi R29, R29, -4   //Decrease the stack pointer
+lw R31, 0(R29)      //Pull the return address
 
 jr R31
 //end modex
@@ -401,41 +400,52 @@ jr R31
 //*******************************************//
 
 /*
-Swap subroutine. Swaps the state of the 5 qubit register
-pointed by R20 with the one pointed by R21.
+This algorithm swaps the content of the quantum register
+pointed by R20 with the one pointed by R21, with its size
+stored in R22.
+It preserves the value of the registers.
 */
 
 swap:
 
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+addi R29, R29, 12
+
 addi R22, R0, 4
-addi R23, R0, 0
 
-swapcont:
-
+nswap:
 qoff R20
-qcnt R20
+qcnt R0
 qoff R21
 qx Q0, Q0
-qcnt R20
+qoff R20
+qcnt R0
 
 qoff R21
-qcnt R21
+qcnt R0
 qoff R20
 qx Q0, Q0
-qcnt R21
+qoff R21
+qcnt R0
 
 qoff R20
-qcnt R20
+qcnt R0
 qoff R21
 qx Q0, Q0
-qcnt R20
+qoff R20
+qcnt R0
 
 addi R20, R20, 1
 addi R21, R21, 1
-addi R23, R23, 1
+addi R22, R22, -1
+bne R22, R0, nswap
 
-bne R23, R22, swapcont
+qoff R0
+addi R29, R29, -12
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
 
 jr R31
-
-//*******************************************//

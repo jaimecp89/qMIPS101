@@ -1,0 +1,66 @@
+/*
+This algorithm swaps the content of the quantum register
+pointed by R20 with the one pointed by R21, with its size
+stored in R22.
+It preserves the value of the registers.
+*/
+
+.text 0
+
+//****Just for testing****
+addi R29, R0, 0x600
+addi R1, R0, 0xF0
+qrst R1
+
+addi R20, R0, 0
+addi R21, R0, 4
+addi R22, R22, 4
+
+jal swap
+trap 0
+//***********************
+
+
+//****Subroutine for swaping****
+
+swap:
+
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+addi R29, R29, 12
+
+nswap:
+qoff R20
+qcnt R0
+qoff R21
+qx Q0, Q0
+qoff R20
+qcnt R0
+
+qoff R21
+qcnt R0
+qoff R20
+qx Q0, Q0
+qoff R21
+qcnt R0
+
+qoff R20
+qcnt R0
+qoff R21
+qx Q0, Q0
+qoff R20
+qcnt R0
+
+addi R20, R20, 1
+addi R21, R21, 1
+addi R22, R22, -1
+bne R22, R0, nswap
+
+qoff R0
+addi R29, R29, -12
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
+
+jr R31
