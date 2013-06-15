@@ -1,0 +1,43 @@
+/*
+Quantum Fourier transform of the register pointed by R20
+with size R21.
+*/
+
+//TEST//
+
+.text 0
+addi R29, R29, 0x600
+addi R21, R0, 5
+qrst R21
+jal qft
+trap 0
+
+//TEST END//
+
+qft:
+
+qoff R20
+addi R22, R0, 1
+addi R23, R0, 1
+addi R24, R0, 2
+qhad Q0, Q0
+beq R21, R22, endqft
+qftcont:
+qcnt R23
+qphs Q0, Q0, R24
+qcnt R23
+addi R23, R23, 1
+addi R24, R24, 1
+bne R23, R21, qftcont
+addi R20, R20, 1
+addi R21, R21, -1
+sw 0(R29), R31
+addi R29, R29, 4
+jal qft
+addi R29, R29, -4
+lw R31, 0(R29)
+
+endqft:
+qoff R0
+jr R31
+//end qft

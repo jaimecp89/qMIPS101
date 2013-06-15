@@ -1,0 +1,183 @@
+/*
+This is an example of the Shor's factoring quantum algorithm.
+*/
+
+.word 0x4FC 4   //Size of the quantum register
+.word 0x500 15  //Number to be factorized
+.text 0
+
+//Init stack pointer
+addi R29, R0, 0x600
+
+//Load initial data from memory.
+addi R1, R0, 0x4FC
+lw R10, 0(R1)
+addi R1, R0, 0x500
+lw R11, 0(R1)
+
+//Main algorithm
+main:
+
+add R20, R0, R10
+add R22, R0, R0
+jal rnd
+add R12, R21, 0 //Random number in R12
+
+beq R12, R11, end
+div R1, R12, R11
+mfhi R1
+beq R0, R1, end //If a = N or a is a factor end
+
+
+
+end:
+trap 0
+
+//end main
+
+/*
+Drapper PADD subroutine.
+It adds a classical number stored in R20 with a
+quantum register pointed by R21 with size R22.
+/*
+padd:
+
+add R24, R0, 0 //R24 as iteration counter
+add R25, R0, 0 //R25 as secondary iteration counter
+
+paddcont:
+qoff R21
+addi R26, R0, 1
+sra R23, R20, R24
+or R23, R26, R23
+addi R24, R24, 1
+beq R0, R23, paddcont1
+qphs Q0, Q0, R24
+paddcont1:
+addi R21, R21, 1
+bne R24, R22, paddcont
+addi R25, R25, 1
+addi R24, R21, R25
+bne R25, R24, paddcont
+
+jr R31
+//end PADD
+
+/*
+Quantum fourier transform of the register pointed by R20
+with size R21.
+*/
+qft:
+
+qoff R20
+addi R22, R0, 1
+addi R23, R0, 1
+addi R24, R0, 2
+qhad Q0, Q0
+beq R21, R22, endqft
+qftcont:
+qcnt R23
+qphs Q0, Q0, R24
+qcnt R23
+addi R23, R23, 1
+addi R24, R24, 1
+bne R23, R21, qftcont
+addi R20, R20, 1
+addi R21, R21, -1
+sw 0(R29), R31
+addi R29, R29, 4
+jal qft
+addi R29, R29, -4
+lw R31, 0(R29)
+
+endqft:
+jr R31
+//end qft
+
+/*
+Subroutine that generates a random number from 0 to 2^R20-1 and stores it in R21.
+It uses the qubit pointed by R22.
+*/
+
+rnd:
+
+sw 0(R29), R20
+sw 4(R29), R22
+sw 8(R29), R23
+sw 12(R29), R24
+addi R29, R29, 16
+
+addi R23, R23, 0
+qoff R22
+
+rndcont:
+qhad Q0, Q0
+qmea Q0, R24, 0
+sll R24, R24, R23
+or R21, R24, R21
+addi R23, R23, 1
+addi R22, R22, 1
+bne R23, R20, rndcont
+
+qoff R0
+qrst R0
+
+addi R29, R29, -16
+lw R20, 0(R29)
+lw R22, 4(R29)
+lw R23, 8(R29)
+lw R24, 12(R29)
+
+jr R31
+//end rnd
+
+/*
+This algorithm swaps the content of the quantum register
+pointed by R20 with the one pointed by R21, with its size
+stored in R22.
+It preserves the value of the registers.
+*/
+
+swap:
+
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+addi R29, R29, 12
+
+addi R22, R0, 4
+
+nswap:
+qoff R20
+qcnt R0
+qoff R21
+qx Q0, Q0
+qoff R20
+qcnt R0
+
+qoff R21
+qcnt R0
+qoff R20
+qx Q0, Q0
+qoff R21
+qcnt R0
+
+qoff R20
+qcnt R0
+qoff R21
+qx Q0, Q0
+qoff R20
+qcnt R0
+
+addi R20, R20, 1
+addi R21, R21, 1
+addi R22, R22, -1
+bne R22, R0, nswap
+
+qoff R0
+addi R29, R29, -12
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
+
+jr R31

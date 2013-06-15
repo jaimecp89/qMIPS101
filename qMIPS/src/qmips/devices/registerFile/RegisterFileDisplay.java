@@ -8,6 +8,7 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
@@ -42,11 +43,13 @@ public class RegisterFileDisplay extends JPanel implements RegisterFile.Display 
 		for (int i = 0; i < 32; i++)
 			elems[i] = "R" + i + ": " + new LogicVector(32).toString();
 		
+		JScrollPane scroll = new JScrollPane();
 		list = new JList<String>(elems);
 		list.setVisibleRowCount(32);
 		list.setBorder(new LineBorder(new Color(0, 0, 0)));
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		add(list);
+		scroll.setViewportView(list);
+		add(scroll);
 
 		JPanel panel = new JPanel();
 		add(panel, BorderLayout.WEST);
