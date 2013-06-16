@@ -15,7 +15,25 @@ trap 0
 //TEST END//
 
 qft:
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+sw 12(R29), R23
+sw 16(R29), R24
+sw 20(R29), R31
+addi R29, R29, 24
+jal recqft
+addi R29, R29, -24
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
+lw R23, 12(R29)
+lw R24, 16(R29)
+lw R31, 20(R29)
 
+jr R31
+
+recqft:
 qoff R20
 addi R22, R0, 1
 addi R23, R0, 1
@@ -33,7 +51,7 @@ addi R20, R20, 1
 addi R21, R21, -1
 sw 0(R29), R31
 addi R29, R29, 4
-jal qft
+jal recqft
 addi R29, R29, -4
 lw R31, 0(R29)
 

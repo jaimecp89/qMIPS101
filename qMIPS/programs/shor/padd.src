@@ -1,37 +1,76 @@
 /*
 Drapper PADD subroutine.
-It adds a classical number stored in R20 with a
-quantum register pointed by R21 with size R22.
+It adds a quantum register pointed by R20 with size R21 in the
+Fourier space with a classical number stored in the register R22.
 */
 
 //TEST//
 .text 0
 addi R29, R0, 0x600
-addi R20, R20, 5
-addi R22, R22, 5
+addi R20, R0, 0
+addi R21, R0, 5
+addi R22, R0, 5
+jal padd
+trap 0
 
 
 //END TEST//
 
 padd:
 
-addi R24, R0, 0 //R24 as iteration counter
-addi R25, R0, 0 //R25 as secondary iteration counter
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+sw 12(R29), R23
+sw 16(R29), R24
+sw 20(R29), R25
+sw 24(R29), R26
+sw 28(R29), R31
+addi R29, R29, 32
 
-paddcont:
-qoff R21
-addi R26, R0, 1
-sra R23, R20, R24
-or R23, R26, R23
-addi R24, R24, 1
-beq R0, R23, paddcont1
-qphs Q0, Q0, R24
-paddcont1:
-addi R21, R21, 1
-bne R24, R22, paddcont
-addi R25, R25, 1
-add R24, R21, R25
-bne R25, R24, paddcont
+add R23, R0, R21
+addi R24, R0, 0
+add R25, R0, R22
+addi R27, R0, 1
+jal recpadd
+
+addi R29, R29, -32
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
+lw R23, 12(R29)
+lw R24, 16(R29)
+lw R25, 20(R29)
+lw R26, 24(R29)
+lw R31, 28(R29)
 
 jr R31
+
+
+recpadd:
+qoff R20
+addi R26, R0, 1
+sll R26, R26, R24
+and R26, R25, R26
+addi R24, R24, 1
+beq R26, R0, recpaddcont
+qphs Q0, Q0, R24
+recpaddcont:
+beq R23, R27, endrecpadd
+bne R24, R23, recpadd
+addi R20, R20, 1
+addi R23, R23, -1
+addi R24, R0, 0
+sub R25, R21, R23
+srl R25, R22, R25
+sw 0(R29), R31
+addi R29, R29, 4
+jal recpadd
+addi R29, R29, -4
+lw R31, 0(R29)
+
+endrecpadd:
+qoff R0
+jr R31
+
 //end PADD

@@ -1,0 +1,181 @@
+
+//TEST//
+.text 0
+
+addi R29, R0, 0x600
+
+addi R20, R0, 0
+addi R21, R0, 4
+addi R22, R0, 3
+addi R23, R0, 2
+qrst R23
+
+jal qft
+
+jal padd
+
+jal qftm1
+
+trap 0
+
+//END TEST//
+
+padd:
+
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+sw 12(R29), R23
+sw 16(R29), R24
+sw 20(R29), R25
+sw 24(R29), R26
+sw 28(R29), R31
+addi R29, R29, 32
+
+add R23, R0, R21
+addi R24, R0, 0
+add R25, R0, R22
+addi R27, R0, 1
+jal recpadd
+
+addi R29, R29, -32
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
+lw R23, 12(R29)
+lw R24, 16(R29)
+lw R25, 20(R29)
+lw R26, 24(R29)
+lw R31, 28(R29)
+
+jr R31
+
+
+recpadd:
+qoff R20
+addi R26, R0, 1
+sll R26, R26, R24
+and R26, R25, R26
+addi R24, R24, 1
+beq R26, R0, recpaddcont
+qphs Q0, Q0, R24
+recpaddcont:
+beq R23, R27, endrecpadd
+bne R24, R23, recpadd
+addi R20, R20, 1
+addi R23, R23, -1
+addi R24, R0, 0
+sub R25, R21, R23
+srl R25, R22, R25
+sw 0(R29), R31
+addi R29, R29, 4
+jal recpadd
+addi R29, R29, -4
+lw R31, 0(R29)
+
+endrecpadd:
+qoff R0
+jr R31
+
+//end PADD
+
+qft:
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+sw 12(R29), R23
+sw 16(R29), R24
+sw 20(R29), R31
+addi R29, R29, 24
+jal recqft
+addi R29, R29, -24
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
+lw R23, 12(R29)
+lw R24, 16(R29)
+lw R31, 20(R29)
+
+jr R31
+
+recqft:
+qoff R20
+addi R22, R0, 1
+addi R23, R0, 1
+addi R24, R0, 2
+qhad Q0, Q0
+beq R21, R22, endqft
+qftcont:
+qcnt R23
+qphs Q0, Q0, R24
+qcnt R23
+addi R23, R23, 1
+addi R24, R24, 1
+bne R23, R21, qftcont
+addi R20, R20, 1
+addi R21, R21, -1
+sw 0(R29), R31
+addi R29, R29, 4
+jal recqft
+addi R29, R29, -4
+lw R31, 0(R29)
+
+endqft:
+qoff R0
+jr R31
+//end qft
+
+qftm1:
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+sw 12(R29), R23
+sw 16(R29), R24
+sw 20(R29), R25
+sw 24(R29), R26
+sw 28(R29), R31
+addi R29, R29, 32
+addi R22, R20, -1
+add R22, R22, R21  //Actual start point to R22
+addi R23, R0, 1   //First size
+addi R24, R0, 1   //Store an 1 for convenience
+jal qftm1cont
+addi R29, R29, -32
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
+lw R23, 12(R29)
+lw R24, 16(R29)
+lw R25, 20(R29)
+lw R26, 24(R29)
+lw R31, 28(R29)
+
+jr R31
+
+qftm1cont:
+qoff R22
+add R25, R0, R23
+addi R26, R23, 1
+beq R24, R23, qftm1cont2
+qftm1cont3
+addi R25, R25, -1
+addi R26, R26, -1
+qcnt R25
+qphs Q0, Q0, R26
+qcnt R25
+bne R25, R24, qftm1cont3
+qftm1cont2:
+qhad Q0, Q0
+beq R23, R21, endqftm1
+addi R22, R22, -1
+addi R23, R23, 1
+sw 0(R29), R31
+addi R29, R29, 4
+jal qftm1cont
+addi R29, R29, -4
+lw R31, 0(R29)
+
+endqftm1:
+qoff R0
+jr R31
+//end qftm1

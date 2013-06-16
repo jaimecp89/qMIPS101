@@ -14,7 +14,7 @@ public class SchematicQMIPSControlUnitDisplay extends JPanel implements IControl
 	
 	private static final long serialVersionUID = 1874419105761208518L;
 	
-	private Image ife, id, qt, qex, qmea, mac, mar, mrc, imm, rew, exe, rc, jrf, jrc, bc, jc, jal, mfhi;
+	private Image ife, id, qt, qex, qmea, mac, mar, maw, mrc, imm, rew, exe, rc, jrf, jrc, bc, jc, jal, mfhi;
 	private Image current;
 	private JPanel imgPanel;
 	private JLabel lblDescription;
@@ -36,6 +36,7 @@ public class SchematicQMIPSControlUnitDisplay extends JPanel implements IControl
 		qmea = new ImageIcon(SchematicQMIPSControlUnitDisplay.class.getResource("/qmips/devices/control/qMIPSControlImgs/fase_qmea.png")).getImage();
 		mac = new ImageIcon(SchematicQMIPSControlUnitDisplay.class.getResource("/qmips/devices/control/qMIPSControlImgs/fase_mac.png")).getImage();
 		mar = new ImageIcon(SchematicQMIPSControlUnitDisplay.class.getResource("/qmips/devices/control/qMIPSControlImgs/fase_mar.png")).getImage();
+		maw = new ImageIcon(SchematicQMIPSControlUnitDisplay.class.getResource("/qmips/devices/control/qMIPSControlImgs/fase_maw.png")).getImage();
 		mrc = new ImageIcon(SchematicQMIPSControlUnitDisplay.class.getResource("/qmips/devices/control/qMIPSControlImgs/fase_mrc.png")).getImage();
 		imm = new ImageIcon(SchematicQMIPSControlUnitDisplay.class.getResource("/qmips/devices/control/qMIPSControlImgs/fase_imm.png")).getImage();
 		rew = new ImageIcon(SchematicQMIPSControlUnitDisplay.class.getResource("/qmips/devices/control/qMIPSControlImgs/fase_rew.png")).getImage();
@@ -68,6 +69,8 @@ public class SchematicQMIPSControlUnitDisplay extends JPanel implements IControl
 			current = mac;
 		}else if(state.equals("MAR")){
 			current = mar;
+		}else if(state.equals("MAW")){
+			current = maw;
 		}else if(state.equals("MRC")){
 			current = mrc;
 		}else if(state.equals("IMM")){

@@ -1,4 +1,6 @@
 .text 0
+addi R10, R0, 5
+qrst R10
 addi R1, R0, 2
 addi R2, R0, 3
 qhad Q0, Q0
