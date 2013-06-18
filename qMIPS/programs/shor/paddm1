@@ -1,0 +1,76 @@
+/*
+Inverse Drapper PADD subroutine.
+*/
+
+//TEST//
+.text 0
+addi R29, R0, 0x600
+addi R20, R0, 0
+addi R21, R0, 5
+addi R22, R0, 0x3F
+qrst R22
+jal padd
+jal paddm1
+trap 0
+
+
+//END TEST//
+
+paddm1:
+
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+sw 12(R29), R23
+sw 16(R29), R24
+sw 20(R29), R25
+sw 24(R29), R26
+sw 28(R29), R31
+addi R29, R29, 32
+
+add R23, R0, R21
+addi R24, R0, 0
+add R25, R0, R22
+addi R27, R0, 1
+jal recpaddm1
+
+addi R29, R29, -32
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
+lw R23, 12(R29)
+lw R24, 16(R29)
+lw R25, 20(R29)
+lw R26, 24(R29)
+lw R31, 28(R29)
+
+jr R31
+
+
+recpaddm1:
+qoff R20
+addi R26, R0, 1
+sll R26, R26, R24
+and R26, R25, R26
+addi R24, R24, 1
+beq R26, R0, recpaddcontm1
+qnph Q0, Q0, R24
+recpaddcontm1:
+beq R23, R27, endrecpaddm1
+bne R24, R23, recpaddm1
+addi R20, R20, 1
+addi R23, R23, -1
+addi R24, R0, 0
+sub R25, R21, R23
+srl R25, R22, R25
+sw 0(R29), R31
+addi R29, R29, 4
+jal recpaddm1
+addi R29, R29, -4
+lw R31, 0(R29)
+
+endrecpaddm1:
+qoff R0
+jr R31
+
+//end PADDM1

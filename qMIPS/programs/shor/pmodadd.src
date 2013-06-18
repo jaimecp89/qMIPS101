@@ -1,27 +1,108 @@
+/*
+Double controlled Drapper modular addition on the quantum register 
+pointed by R20 and R22, with size R21, modulo R23. The control qubits
+are pointed by R24 and R25. It uses an auxiliary qubit pointed by R26.
+*/
 
 //TEST//
 .text 0
+addi R29, R29, 0x1000
+addi R20, R20, 0
+addi R21, R21, 5
+addi R22, R22, 3
+addi R23, R23, 4
+addi R24, R24, 29
+addi R25, R25, 30
+addi R26, R26, 31
+addi R10, R10, 5
+qrst R10
 
-addi R29, R0, 0x600
-
-addi R20, R0, 0
-addi R21, R0, 5
-addi R22, R0, 2
-addi R23, R0, 5
-qrst R23
-
-trap 0
 jal qft
-
-trap 0
-jal padd
-
-trap 0
+jal pmodadd
 jal qftm1
 
 trap 0
 
 //END TEST//
+
+pmodadd:
+
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+sw 12(R29), R23
+sw 16(R29), R24
+sw 20(R29), R25
+sw 24(R29), R26
+sw 28(R29), R27
+sw 32(R29), R28
+sw 36(R29), R31
+addi R29, R29, 40
+
+qcnt R24
+qcnt R25
+jal padd
+qcnt R24
+qcnt R25
+
+add R27, R22, R0
+add R22, R23, R0
+jal paddm1
+
+add R28, R20, R21
+addi R28, R28, -1
+jal qftm1
+qcnt R28
+qoff R26
+qx Q0, Q0
+qoff R20
+qcnt R26
+jal qft
+
+qcnt R26
+jal padd
+qcnt R26
+
+add R22, R27, R0
+qcnt R24
+qcnt R25
+jal padd
+qcnt R24
+qcnt R25
+
+jal qftm1
+qoff R28
+qx Q0, Q0
+qoff R0
+qcnt R28
+qoff R26
+qx Q0, Q0
+qoff R0
+qcnt R26
+qoff R28
+qx Q0, Q0
+qoff R0
+jal qft
+
+qcnt R24
+qcnt R25
+jal padd
+qcnt R24
+qcnt R25
+
+addi R29, R29, -40
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
+lw R23, 12(R29)
+lw R24, 16(R29)
+lw R25, 20(R29)
+lw R26, 24(R29)
+lw R27, 28(R29)
+lw R28, 32(R29)
+lw R31, 36(R29)
+
+//END PMODADD
 
 padd:
 
@@ -32,8 +113,9 @@ sw 12(R29), R23
 sw 16(R29), R24
 sw 20(R29), R25
 sw 24(R29), R26
-sw 28(R29), R31
-addi R29, R29, 32
+sw 28(R29), R27
+sw 32(R29), R31
+addi R29, R29, 36
 
 add R23, R0, R21
 addi R24, R0, 0
@@ -41,7 +123,7 @@ add R25, R0, R22
 addi R27, R0, 1
 jal recpadd
 
-addi R29, R29, -32
+addi R29, R29, -36
 lw R20, 0(R29)
 lw R21, 4(R29)
 lw R22, 8(R29)
@@ -49,7 +131,8 @@ lw R23, 12(R29)
 lw R24, 16(R29)
 lw R25, 20(R29)
 lw R26, 24(R29)
-lw R31, 28(R29)
+lw R27, 28(R29)
+lw R31, 32(R29)
 
 jr R31
 
@@ -81,6 +164,69 @@ qoff R0
 jr R31
 
 //end PADD
+
+
+paddm1:
+
+sw 0(R29), R20
+sw 4(R29), R21
+sw 8(R29), R22
+sw 12(R29), R23
+sw 16(R29), R24
+sw 20(R29), R25
+sw 24(R29), R26
+sw 28(R29), R27
+sw 32(R29), R31
+addi R29, R29, 36
+
+add R23, R0, R21
+addi R24, R0, 0
+add R25, R0, R22
+addi R27, R0, 1
+jal recpaddm1
+
+addi R29, R29, -36
+lw R20, 0(R29)
+lw R21, 4(R29)
+lw R22, 8(R29)
+lw R23, 12(R29)
+lw R24, 16(R29)
+lw R25, 20(R29)
+lw R26, 24(R29)
+lw R27, 28(R29)
+lw R31, 32(R29)
+
+jr R31
+
+
+recpaddm1:
+qoff R20
+addi R26, R0, 1
+sll R26, R26, R24
+and R26, R25, R26
+addi R24, R24, 1
+beq R26, R0, recpaddcontm1
+qnph Q0, Q0, R24
+recpaddcontm1:
+beq R23, R27, endrecpaddm1
+bne R24, R23, recpaddm1
+addi R20, R20, 1
+addi R23, R23, -1
+addi R24, R0, 0
+sub R25, R21, R23
+srl R25, R22, R25
+sw 0(R29), R31
+addi R29, R29, 4
+jal recpaddm1
+addi R29, R29, -4
+lw R31, 0(R29)
+
+endrecpaddm1:
+qoff R0
+jr R31
+
+//end PADDM1
+
 
 qft:
 sw 0(R29), R20
@@ -127,6 +273,7 @@ endqft:
 qoff R0
 jr R31
 //end qft
+
 
 qftm1:
 sw 0(R29), R20

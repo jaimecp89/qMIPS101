@@ -96,6 +96,10 @@ public class QuantumControl extends Device{
 							PhaseShiftGate ph = new PhaseShiftGate("(2*pi)/(2^" + regValue.read().toInteger() + ")");
 							qarray.setState(ph.operate(state, (qarray.getSelectedTarget() + offset) % 32, control));
 							break;
+						case 0x11: //QNPH
+							PhaseShiftGate np = new PhaseShiftGate("(-2*pi)/(2^" + regValue.read().toInteger() + ")");
+							qarray.setState(np.operate(state, (qarray.getSelectedTarget() + offset) % 32, control));
+							break;
 						case 0x1A: //QMEA
 							Measure m = new Measure();
 							qarray.setState(m.operate(state, qarray.getSelectedTarget()));

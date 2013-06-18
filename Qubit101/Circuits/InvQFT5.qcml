@@ -3,52 +3,52 @@
 		<gate gate_id="1" qubit="4"/>
 	</stage>
 	<stage size="5">
-		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="3"/>
+		<gate alpha="(-2*pi)/(2^2)" controlled="true" gate_id="6" qubit="3"/>
 		<control qubit="4"/>
 	</stage>
 	<stage size="5">
 		<gate gate_id="1" qubit="3"/>
 	</stage>
 	<stage size="5">
-		<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="2"/>
+		<gate alpha="(-2*pi)/(2^3)" controlled="true" gate_id="6" qubit="2"/>
 		<control qubit="4"/>
 	</stage>
 	<stage size="5">
-		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="2"/>
+		<gate alpha="(-2*pi)/(2^2)" controlled="true" gate_id="6" qubit="2"/>
 		<control qubit="3"/>
 	</stage>
 	<stage size="5">
 		<gate gate_id="1" qubit="2"/>
 	</stage>
 	<stage size="5">
-		<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="1"/>
+		<gate alpha="(-2*pi)/(2^4)" controlled="true" gate_id="6" qubit="1"/>
 		<control qubit="4"/>
 	</stage>
 	<stage size="5">
-		<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="1"/>
+		<gate alpha="(-2*pi)/(2^3)" controlled="true" gate_id="6" qubit="1"/>
 		<control qubit="3"/>
 	</stage>
 	<stage size="5">
-		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="1"/>
+		<gate alpha="(-2*pi)/(2^2)" controlled="true" gate_id="6" qubit="1"/>
 		<control qubit="2"/>
 	</stage>
 	<stage size="5">
 		<gate gate_id="1" qubit="1"/>
 	</stage>
 	<stage size="5">
-		<gate alpha="2*pi/2*5" controlled="true" gate_id="6" qubit="0"/>
+		<gate alpha="(-2*pi)/(2^5)" controlled="true" gate_id="6" qubit="0"/>
 		<control qubit="4"/>
 	</stage>
 	<stage size="5">
-		<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="0"/>
+		<gate alpha="(-2*pi)/(2^4)" controlled="true" gate_id="6" qubit="0"/>
 		<control qubit="3"/>
 	</stage>
 	<stage size="5">
-		<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="0"/>
+		<gate alpha="(-2*pi)/(2^3)" controlled="true" gate_id="6" qubit="0"/>
 		<control qubit="2"/>
 	</stage>
 	<stage size="5">
-		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="0"/>
+		<gate alpha="(-2*pi)/(2^2)" controlled="true" gate_id="6" qubit="0"/>
 		<control qubit="1"/>
 	</stage>
 	<stage size="5">

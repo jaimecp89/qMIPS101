@@ -59,6 +59,7 @@ tokens{
   QZ = "qz";
   QMEA = "qmea";
   QPHS = "qphs";
+  QNPH = "qnph";
   QRST = "qrst";
   QCNT = "qcnt";
   QOFF = "qoff";

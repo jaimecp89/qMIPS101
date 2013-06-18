@@ -1,62 +1,62 @@
 <qcircuit name="DrapperADD.qcml" size="15">
 	<stage size="10">
 		<control qubit="0"/>
-		<gate alpha="2*pi/2*1" controlled="true" gate_id="6" qubit="5"/>
+		<gate alpha="(2*pi)/(2^1)" controlled="true" gate_id="6" qubit="5"/>
 	</stage>
 	<stage size="10">
 		<control qubit="1"/>
-		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="5"/>
+		<gate alpha="(2*pi)/(2^2)" controlled="true" gate_id="6" qubit="5"/>
 	</stage>
 	<stage size="10">
 		<control qubit="2"/>
-		<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="5"/>
+		<gate alpha="(2*pi)/(2^3)" controlled="true" gate_id="6" qubit="5"/>
 	</stage>
 	<stage size="10">
 		<control qubit="3"/>
-		<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="5"/>
+		<gate alpha="(2*pi)/(2^4)" controlled="true" gate_id="6" qubit="5"/>
 	</stage>
 	<stage size="10">
 		<control qubit="4"/>
-		<gate alpha="2*pi/2*5" controlled="true" gate_id="6" qubit="5"/>
+		<gate alpha="(2*pi)/(2^5)" controlled="true" gate_id="6" qubit="5"/>
 	</stage>
 	<stage size="10">
 		<control qubit="1"/>
-		<gate alpha="2*pi/2*1" controlled="true" gate_id="6" qubit="6"/>
+		<gate alpha="(2*pi)/(2^1)" controlled="true" gate_id="6" qubit="6"/>
 	</stage>
 	<stage size="10">
 		<control qubit="2"/>
-		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="6"/>
+		<gate alpha="(2*pi)/(2^2)" controlled="true" gate_id="6" qubit="6"/>
 	</stage>
 	<stage size="10">
 		<control qubit="3"/>
-		<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="6"/>
+		<gate alpha="(2*pi)/(2^3)" controlled="true" gate_id="6" qubit="6"/>
 	</stage>
 	<stage size="10">
 		<control qubit="4"/>
-		<gate alpha="2*pi/2*4" controlled="true" gate_id="6" qubit="6"/>
+		<gate alpha="(2*pi)/(2^4)" controlled="true" gate_id="6" qubit="6"/>
 	</stage>
 	<stage size="10">
 		<control qubit="2"/>
-		<gate alpha="2*pi/2*1" controlled="true" gate_id="6" qubit="7"/>
+		<gate alpha="(2*pi)/(2^1)" controlled="true" gate_id="6" qubit="7"/>
 	</stage>
 	<stage size="10">
 		<control qubit="3"/>
-		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="7"/>
+		<gate alpha="(2*pi)/(2^2)" controlled="true" gate_id="6" qubit="7"/>
 	</stage>
 	<stage size="10">
 		<control qubit="4"/>
-		<gate alpha="2*pi/2*3" controlled="true" gate_id="6" qubit="7"/>
+		<gate alpha="(2*pi)/(2^3)" controlled="true" gate_id="6" qubit="7"/>
 	</stage>
 	<stage size="10">
 		<control qubit="3"/>
-		<gate alpha="2*pi/2*1" controlled="true" gate_id="6" qubit="8"/>
+		<gate alpha="(2*pi)/(2^1)" controlled="true" gate_id="6" qubit="8"/>
 	</stage>
 	<stage size="10">
 		<control qubit="4"/>
-		<gate alpha="2*pi/2*2" controlled="true" gate_id="6" qubit="8"/>
+		<gate alpha="(2*pi)/(2^2)" controlled="true" gate_id="6" qubit="8"/>
 	</stage>
 	<stage size="10">
 		<control qubit="4"/>
-		<gate alpha="2*pi/2*1" controlled="true" gate_id="6" qubit="9"/>
+		<gate alpha="(2*pi)/(2^1)" controlled="true" gate_id="6" qubit="9"/>
 	</stage>
 </qcircuit>

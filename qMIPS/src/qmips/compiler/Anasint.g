@@ -290,6 +290,14 @@ quantum :
         	pc = pc+4;
         }
         |
+        {int target, control, arg;}
+        QNPH target=qregister C control=qregister C arg=iregister
+        {
+        	instrMem.load(new LogicVector((0x0C << 26) + (arg << 21) + (target << 16) + (control << 11) + 0x11, 32), pc);
+        	instructions.put(pc, new Instruction("qnph", new String[]{"Q" + target, "Q" + control, "R" + arg})); 
+        	pc = pc+4;
+        }
+        |
         {int target, reg, arg;}
         QMEA target=qregister C reg = iregister C arg=integer
         {

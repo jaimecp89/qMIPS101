@@ -50,7 +50,7 @@ qftm1cont3
 addi R25, R25, -1
 addi R26, R26, -1
 qcnt R25
-qphs Q0, Q0, R26
+qnph Q0, Q0, R26
 trap 0
 qcnt R25
 bne R25, R24, qftm1cont3
