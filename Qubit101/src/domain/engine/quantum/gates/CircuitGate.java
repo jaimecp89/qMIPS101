@@ -1,8 +1,3 @@
-// Decompiled by DJ v3.12.12.96 Copyright 2011 Atanas Neshkov  Date: 05/10/2011 0:28:24
-// Home Page: http://members.fortunecity.com/neshkov/dj.html  http://www.neshkov.com/dj.html - Check often for new version!
-// Decompiler options: packimports(3) 
-// Source File Name:   CircuitGate.java
-
 package domain.engine.quantum.gates;
 
 import domain.engine.circuit.Circuit;
