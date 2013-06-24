@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
