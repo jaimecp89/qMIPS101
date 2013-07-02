@@ -1,0 +1,18 @@
+<qcircuit name="Deutsch" size="7">
+	<stage size="2">
+		<gate gate_id="3" qubit="1"/>
+	</stage>
+	<stage size="2">
+		<gate gate_id="1" qubit="0"/>
+		<gate gate_id="1" qubit="1"/>
+	</stage>
+	<stage size="2"/>
+	<stage size="2"/>
+	<stage size="2"/>
+	<stage size="2">
+		<gate gate_id="1" qubit="0"/>
+	</stage>
+	<stage size="2">
+		<gate gate_id="-3" qubit="0"/>
+	</stage>
+</qcircuit>
